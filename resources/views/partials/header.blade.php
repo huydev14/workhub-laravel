@@ -154,7 +154,7 @@
                 <a data-toggle="dropdown" href="#" class="!tw-h-full tw-flex tw-items-center">
                     <img src="{{ asset('adminlte/dist/img/user2-160x160.jpg') }}"
                         class="img-circle elevation-2 mr-2 tw-object-cover tw-w-8 tw-h-8" alt="User">
-                    <span>Gia Huy Codes</span>
+                    <span>{{ auth()->user()->name }}</span>
                 </a>
 
                 <div class="dropdown-menu">
@@ -164,9 +164,12 @@
                     </a>
 
                     {{-- Dropdown --}}
-                    <a href="{{ route('profile.destroy') }}" class="dropdown-item">
-                        <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
-                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
+                        </button>
+                    </form>
                 </div>
             </li>
 
