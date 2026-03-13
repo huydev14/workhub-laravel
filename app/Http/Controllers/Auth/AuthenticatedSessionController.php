@@ -61,10 +61,11 @@ class AuthenticatedSessionController extends Controller
             Log::error("Logout error: " . $e->getMessage());
         }
 
-        return redirect('/')
+        return redirect()->route('login')
             ->withCookies([
                 cookie()->forget('access_token'),
                 cookie()->forget('refresh_token')
-            ]);
+            ])
+            ->with(['status' => 'Đăng xuất thành công']);
     }
 }

@@ -42,7 +42,7 @@ class JwtAuthenticate
                     $response =  $next($request);
                 }
             } catch (TokenBlacklistedException) {
-                $response = redirect()->route('login')->withErrors(['session' => 'Phiên đăng nhập đã hết hạn.']);
+                $response = redirect()->route('login')->with(['status' => 'Phiên đăng nhập đã hết hạn.']);
             } catch (TokenExpiredException) {
                 return $this->silentRefresh($request, $next, $refreshToken);
             } catch (\Exception $e) {
@@ -59,7 +59,7 @@ class JwtAuthenticate
     private function silentRefresh($request, $next, $refreshToken)
     {
         if (!$refreshToken) {
-            return redirect()->route('login');
+            return redirect()->route('login')->with(['status' => 'Phiên làm việc hết hạn, vui lòng đăng nhập lại.']);
         }
 
         try {
@@ -77,13 +77,14 @@ class JwtAuthenticate
             Auth::shouldUse('api');
 
             $response = $next($request);
-            
+
             return $response->withCookie(
                 cookie('access_token', $newAccessToken, config('jwt.ttl'))
             );
         } catch (\Exception $e) {
             \Log::error('Silent refresh token error: ' . $e->getMessage());
-            return redirect()->withErrors(['session' => 'Phiên làm việc hết hạn, vui lòng đăng nhập lại.']);
+            return redirect()->route('login')
+                ->with(['status' => 'Phiên làm việc hết hạn, vui lòng đăng nhập lại.']);
         }
     }
 }
