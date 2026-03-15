@@ -30,8 +30,8 @@ return new class extends Migration
             // Employment details
             $table->unsignedTinyInteger('employment_type')->default(0)->comment('O: full-time, 1: part-time');
             $table->unsignedTinyInteger('status')->default(0)->comment('O: đang làm, 1: nghỉ việc');
-            $table->dateTime('start_day')->nullable();
-            $table->dateTime('end_day')->nullable();
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
 
             // Personal info
             $table->unsignedTinyInteger('gender')->default(0)->comment('O: nam, 1: nữ');
