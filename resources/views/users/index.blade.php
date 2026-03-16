@@ -112,8 +112,23 @@
                         orderable: false,
                         searchable: false
                     }
-
-                ]
+                ],
+                language: {
+                    "processing": "{{ __('datatables.processing') }}",
+                    "search": "{{ __('datatables.search') }}",
+                    "lengthMenu": "{{ __('datatables.lengthMenu') }}",
+                    "info": "{{ __('datatables.info') }}",
+                    "infoEmpty": "{{ __('datatables.infoEmpty') }}",
+                    "infoFiltered": "{{ __('datatables.infoFiltered') }}",
+                    "zeroRecords": "{{ __('datatables.zeroRecords') }}",
+                    "loadingRecords": "{{ __('datatables.loadingRecords') }}",
+                    "paginate": {
+                        "first": "{{ __('datatables.paginate.first') }}",
+                        "last": "{{ __('datatables.paginate.last') }}",
+                        "next": "{{ __('datatables.paginate.next') }}",
+                        "previous": "{{ __('datatables.paginate.previous') }}"
+                    },
+                }
             });
         });
     </script>
