@@ -122,12 +122,16 @@
                     "infoFiltered": "{{ __('datatables.infoFiltered') }}",
                     "zeroRecords": "{{ __('datatables.zeroRecords') }}",
                     "loadingRecords": "{{ __('datatables.loadingRecords') }}",
-                    "paginate": {
-                        "first": "{{ __('datatables.paginate.first') }}",
-                        "last": "{{ __('datatables.paginate.last') }}",
-                        "next": "{{ __('datatables.paginate.next') }}",
-                        "previous": "{{ __('datatables.paginate.previous') }}"
+                },
+                layout: {
+                    topStart: 'pageLength',
+                    topEnd: {
+                        search: {
+                            placeholder: 'Tìm kiếm nhân viên...'
+                        }
                     },
+                    bottomStart: 'info',
+                    bottomEnd: 'paging',
                 }
             });
         });

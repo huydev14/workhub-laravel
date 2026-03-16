@@ -7,12 +7,6 @@ return [
     'lengthMenu'     => 'Display _MENU_ records per page',
     'search'         => 'Filter records:',
     'zeroRecords'    => 'Nothing found - sorry',
-    'paginate'       => [
-        'first'    => 'First',
-        'last'     => 'Last',
-        'next'     => 'Next',
-        'previous' => 'Previous',
-    ],
     'processing'     => 'Processing...',
     'loadingRecords' => 'Loading...',
 ];
