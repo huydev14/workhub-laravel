@@ -1,5 +1,6 @@
 @import "./custom.css";
 @import 'datatables.net-dt/css/dataTables.dataTables.css';
+@import 'flag-icons/css/flag-icons.min.css';
 
 @tailwind base;
 @tailwind components;
