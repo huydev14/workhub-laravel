@@ -50,7 +50,6 @@
                         data: 'email',
                         name: 'email'
                     },
-
                     {
                         data: 'department.name',
                         name: 'department.name',
@@ -66,7 +65,6 @@
                         name: 'team.name',
                         defaultContent: '-'
                     },
-
                     {
                         data: 'employment_type',
                         name: 'employment_type'
@@ -83,7 +81,6 @@
                         data: 'end_date',
                         name: 'end_date'
                     },
-
                     {
                         data: 'gender',
                         name: 'gender'
@@ -100,10 +97,9 @@
                         data: 'address',
                         name: 'address'
                     },
-
                     {
                         data: 'account_type.name',
-                        name: 'account_type.name',
+                        name: 'accountType.name',
                         defaultContent: '-'
                     },
                     {
