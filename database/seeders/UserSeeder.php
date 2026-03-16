@@ -104,5 +104,7 @@ class UserSeeder extends Seeder
                 'address' => 'Hà Nội, Việt Nam',
             ]
         );
+
+        User::factory()->count(50)->create();
     }
 }
