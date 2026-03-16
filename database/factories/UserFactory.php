@@ -5,6 +5,10 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\AccountType;
+use App\Models\Department;
+use App\Models\Position;
+use App\Models\Team;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -23,12 +27,34 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $startDate = fake()->dateTimeBetween('-2 years', 'now');
+
         return [
-            'name' => fake()->name(),
+            'name'  => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'password'       => static::$password ??= Hash::make('123'),
+            'remember_token' => null,
+            'refresh_token'  => null,
+
+            'account_type_id' => AccountType::inRandomOrder()->first()?->id ?? 1,
+            'department_id'   => Department::inRandomOrder()->first()?->id ?? 1,
+            'position_id'     => Position::inRandomOrder()->first()?->id ?? 1,
+            'team_id'     => Team::inRandomOrder()->first()?->id ?? 1,
+
+            'employment_type' => fake()->randomElement([0, 0, 1]),
+            'status' => fake()->randomElement([0, 0, 0, 1]),
+
+            'start_date' => $startDate,
+            'end_date'   => fake()->optional(0.1)->dateTimeBetween($startDate, '+1 year'),
+
+            'gender'   => fake()->randomElement([0,1]),
+            'birthday' => fake()->dateTimeBetween('-40 years', '-20 years')->format('Y-m-d'),
+            'phone'    => fake()->phoneNumber(),
+            'address'  => fake()->optional(0.3)->address(),
+
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 
@@ -37,7 +63,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
