@@ -3,6 +3,18 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+
+/**
+ * Lang switch
+ */
+Route::get('lang/{locale}', function ($locale){
+    if(in_array($locale, ['en', 'vi'])){
+        Session::put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 
 Route::get('/', function () {
     return view('dashboard.index');
