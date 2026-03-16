@@ -17,7 +17,12 @@ class UserController extends Controller
 
     public function data()
     {
-        $users = User::with(['department', 'position', 'team', 'accountType']);
+        $users = User::with(['department', 'position', 'team', 'accountType'])
+            ->select('users.*')
+            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->leftJoin('teams', 'users.team_id', '=', 'teams.id')
+            ->leftJoin('account_types', 'users.account_type_id', '=', 'account_types.id');
 
         return DataTables::of($users)
             ->addIndexColumn()
