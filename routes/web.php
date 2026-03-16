@@ -18,5 +18,5 @@ require __DIR__ . '/auth.php';
 
 Route::middleware('jwt.cookie')->prefix('users')->name('users.')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('index');
-    Route::get('/data', [UserController::class, 'getUserData'])->name('data');
+    Route::get('/data', [UserController::class, 'data'])->name('data');
 });
