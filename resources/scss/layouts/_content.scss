@@ -1,0 +1,24 @@
+@use '../base/variables' as *;
+
+.content {
+
+    background: $surface-color !important;
+    padding: 14px 18px 24px;
+}
+
+/* Content shell */
+.content-header {
+    padding: 6px 0 10px;
+}
+
+.content-header .m-0 {
+    font-size: 23px;
+    font-weight: 600;
+    color: #1d2530;
+}
+
+.content .container,
+.content .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}

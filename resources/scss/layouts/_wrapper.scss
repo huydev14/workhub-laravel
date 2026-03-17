@@ -1,0 +1,24 @@
+@use '../base/variables';
+
+.wrapper {
+    display: grid;
+    min-height: 100vh;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        'header header'
+        'sidebar content'
+        'footer footer';
+}
+
+.header {
+    grid-area: header;
+}
+
+.sidebar {
+    grid-area: sidebar;
+}
+
+.content {
+    grid-area: content;
+}

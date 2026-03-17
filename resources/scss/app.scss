@@ -1,0 +1,25 @@
+// Base
+@use 'base/variables';
+@use 'base/global';
+
+// Layouts
+@use 'layouts/wrapper';
+@use 'layouts/header';
+@use 'layouts/sidebar';
+@use 'layouts/footer';
+@use 'layouts/content';
+
+// Components
+@use 'components/buttons';
+
+// Plugins
+@use 'plugins/datatables';
+@use 'plugins/select2';
+
+@import 'datatables.net-bs4/css/dataTables.bootstrap4.min.css';
+@import 'flag-icons/css/flag-icons.min.css';
+
+// Tailwind
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
