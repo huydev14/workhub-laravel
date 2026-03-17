@@ -1,5 +1,5 @@
 <!-- Main Sidebar Container -->
-<aside class="sidebar tw-shadow-sm">
+<aside class="sidebar">
     <!-- Sidebar Menu -->
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">

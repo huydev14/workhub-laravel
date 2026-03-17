@@ -1,0 +1,40 @@
+@use '../base/variables' as *;
+
+.sidebar {
+    background: $surface-color !important;
+    height: 100%;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    border-right: 1px solid $border-subtle;
+
+    .nav-link {
+        color: $text-main !important;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .nav-sidebar > .nav-item .nav-icon {
+        font-size: 0.9rem !important;
+    }
+
+    .nav-link:hover {
+        background: $hover-bg;
+        color: $text-hover !important;
+    }
+
+    .nav-link.active,
+    .menu-open > .nav-link {
+        background: #fff !important;
+    }
+
+    .nav-treeview > .nav-item > .nav-link {
+        margin-left: 18px;
+        font-size: 13px;
+        color: $text-subtle !important;
+    }
+
+    .nav-treeview > .nav-item > .nav-link:hover {
+        background: $hover-bg-strong;
+        color: $text-hover !important;
+    }
+}
