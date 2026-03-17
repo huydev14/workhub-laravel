@@ -21,6 +21,9 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "flag-icons": "^7.5.0"
+        "datatables.net": "^2.3.7",
+        "datatables.net-bs4": "^2.3.7",
+        "flag-icons": "^7.5.0",
+        "jquery": "^3.7.1"
     }
 }
