@@ -30,12 +30,20 @@
 
     <script type="module">
         $(function() {
-            $('#users-table').DataTable({
+            let table = $('#users-table').DataTable({
                 processing: true,
                 serverSide: true, // Enables server-side processing,
                 scrollX: true,
                 autoWidth: false,
-                ajax: '{!! route('users.data') !!}',
+                ajax: {
+                    url: '{!! route('users.data') !!}',
+                    data: function(d) {
+                        d.status = $('#f_status').val() || '';
+                        d.department_id = $('#f_department').val() || '';
+                        d.team_id = $('#f_team').val() || '';
+                        d.account_type_id = $('#f_account_type').val() || '';
+                    }
+                },
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -121,24 +129,54 @@
                 },
                 layout: {
                     topStart: 'pageLength',
-                    topEnd: [
-                        {
+                    topEnd: [{
                             search: {
                                 placeholder: 'Tìm kiếm nhân viên...'
                             }
                         },
                         $(`<div class="dt-toolbar d-flex">
-                                <select id="f_status" class="form-select"><option value="">Trạng thái</option></select>
-                                <select id="f_department" class="form-select"><option value="">Bộ phận</option></select>
-                                <select id="f_team" class="form-select"><option value="">Đội nhóm</option></select>
-                                <select id="f_account_type" class="form-select"><option value="">Loại tài khoản</option></select>
+                                <select id="f_status" class="form-select !tw-py-0 !tw-pl-2 !tw-pr-8"><option value="">Trạng thái</option></select>
+                                <select id="f_department" class="form-select !tw-py-0 !tw-px-2"><option value="">Bộ phận</option></select>
+                                <select id="f_team" class="form-select !tw-py-0 !tw-pl-2 !tw-pr-0"><option value="">Đội nhóm</option></select>
+                                <select id="f_account_type" class="form-select !tw-py-0 !tw-pl-2 !tw-pr-8"><option value="">Loại tài khoản</option></select>
                                 <button id="btn-clear-filters" class="btn btn-sm">Xoá lọc</button>
-                            </div>`)
+                            </div>`
+                        )
                     ],
                     bottomStart: 'info',
                     bottomEnd: 'paging',
                 },
             });
+            $.getJSON('{!! route('users.filter_data') !!}')
+                .done(function(res) {
+                    fill('#f_status', res.status_data);
+                    fill('#f_department', res.department_data);
+                    fill('#f_team', res.team_data);
+                    fill('#f_account_type', res.account_type_data);
+
+                    function fill(selector, items) {
+                        let element = $(selector);
+
+                        if (!items) {
+                            items = [];
+                        }
+                        items.forEach(item => {
+                            let option = new Option(item.text, item.id);
+                            element.append(option);
+                        })
+                    }
+                })
+                .fail(function(err) {
+                    console.error('Fail to get data for filters: ', err);
+                })
+
+            $(document).on('change', '.dt-toolbar select', function(){
+                table.ajax.reload();
+            })
+            $(document).on('click', '#btn-clear-filters' ,function(){
+                $('#f_status, #f_department, #f_team, #f_account_type').val('');
+                table.ajax.reload();
+            })
         });
     </script>
 @endsection
