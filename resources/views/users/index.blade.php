@@ -27,8 +27,7 @@
         </thead>
     </table>
 
-
-    <script type="module">
+    <script>
         $(function() {
             let table = $('#users-table').DataTable({
                 processing: true,
