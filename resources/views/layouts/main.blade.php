@@ -25,7 +25,7 @@
     <!-- Select2 JS -->
     <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js')}}"></script>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 
 <body class="hold-transition sidebar-mini">
