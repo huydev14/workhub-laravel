@@ -49,30 +49,3 @@
 .sidebar .nav-link:hover {
     color: #2c3e50 !important;
 }
-
-/*
-* Custom Datatable
-*/
-div.dt-container select.dt-input {
-    padding-left: 7px !important;
-    padding-right: 22px !important;
-    margin-right: 5px;
-}
-
-/* paginate */
-div.dt-container .dt-paging button.dt-paging-button.current,
-div.dt-container .dt-paging button.dt-paging-button.current:hover {
-    background: var(--primary) !important;
-    border: 1px solid var(--primary) !important;
-    color: #ffffff !important;
-    border-radius: 5px !important;
-    box-shadow: none !important;
-}
-
-div.dt-container .dt-paging .dt-paging-button:hover:not(.current) {
-    background: var(--primary-hover) !important;
-    color: #fff !important;
-    border: 1px solid var(--primary) !important;
-    background-image: none !important;
-    border-radius: 5px !important;
-}

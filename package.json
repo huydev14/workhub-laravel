@@ -21,7 +21,6 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "datatables.net-dt": "^2.3.7",
         "flag-icons": "^7.5.0"
     }
 }
