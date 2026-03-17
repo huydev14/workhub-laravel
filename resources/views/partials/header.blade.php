@@ -1,200 +1,68 @@
-<!-- Navbar -->
-<nav class="header !tw-justify-between navbar navbar-expand navbar-white navbar-light tw-shadow-md">
-    <div class="header-left tw-flex tw-flex-row tw-justify-between tw-px-2">
-        <!-- Brand Logo -->
-        <a href="/" class="tw-flex tw-items-center tw-gap-2">
-            <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-                class="brand-image img-circle shadow-sm tw-w-10 tw-h-10 style="opacity: .8">
-            <span class="text-dark tw-block"">{{ config('app.name') }}</span>
+<nav class="header navbar navbar-expand topbar">
+    <div class="brand-area">
+        <button type="button" class="nav-link icon-btn" data-widget="pushmenu" aria-label="Toggle menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a href="/" class="brand-link">
+            <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="App logo" class="brand-logo">
+            <span class="brand-name">{{ config('app.name') }}</span>
+            <span class="brand-module">Field Service</span>
         </a>
-
-        <div>
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-        </div>
     </div>
 
-    <div class="header-right tw-flex tw-flex-row tw-justify-between">
-        <!-- Left navbar links -->
-        <ul class="navbar-nav">
+    <div class="search-wrap">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" class="form-control search-input" placeholder="Search" aria-label="Search">
+    </div>
 
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="index3.html" class="nav-link">Home</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="#" class="nav-link">Contact</a>
-            </li>
-        </ul>
+    <ul class="navbar-nav topbar-actions">
+        <li class="nav-item dropdown profile-menu">
+            <a data-toggle="dropdown" href="#" class="nav-link profile-link icon-btn">
+                <img src="{{ asset('adminlte/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User">
+                <span>{{ auth()->user()->name }}</span>
+            </a>
 
-        <!-- Right navbar links -->
-        <ul class="navbar-nav mr-2">
-            <!-- Navbar Search -->
-            <li class="nav-item">
-                <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                    <i class="fas fa-search"></i>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                    <i class="fas fa-user mr-2"></i> Profile
                 </a>
-                <div class="navbar-search-block">
-                    <form class="form-inline">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                                aria-label="Search">
-                            <div class="input-group-append">
-                                <button class="btn btn-navbar" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </li>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
+                    </button>
+                </form>
+            </div>
+        </li>
 
-            <!-- Messages Dropdown Menu -->
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#">
-                    <i class="far fa-comments"></i>
-                    <span class="badge badge-danger navbar-badge">3</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    Brad Diesel
-                                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">Call me whenever you can...</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    John Pierce
-                                    <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">I got your message bro</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    Nora Silvester
-                                    <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">The subject goes here</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                </div>
-            </li>
-
-            <!-- Notifications Dropdown Menu -->
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#">
-                    <i class="far fa-bell"></i>
-                    <span class="badge badge-warning navbar-badge">15</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-item dropdown-header">15 Notifications</span>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-envelope mr-2"></i> 4 new messages
-                        <span class="float-right text-muted text-sm">3 mins</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-users mr-2"></i> 8 friend requests
-                        <span class="float-right text-muted text-sm">12 hours</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-file mr-2"></i> 3 new reports
-                        <span class="float-right text-muted text-sm">2 days</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                    <i class="fas fa-expand-arrows-alt"></i>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-                    <i class="fas fa-th-large"></i>
-                </a>
-            </li>
-
-            {{-- Profile --}}
-            <li class="nav-item dropdown tw-transition tw-duration-100 hover:!tw-bg-gray-200 tw-rounded-lg">
-                <a data-toggle="dropdown" href="#" class="!tw-h-full tw-flex tw-items-center">
-                    <img src="{{ asset('adminlte/dist/img/user2-160x160.jpg') }}"
-                        class="img-circle elevation-2 mr-2 tw-object-cover tw-w-8 tw-h-8" alt="User">
-                    <span>{{ auth()->user()->name }}</span>
-                </a>
-
-                <div class="dropdown-menu">
-                    {{-- Edit profile --}}
-                    <a href="{{ route('profile.edit') }}" class="dropdown-item">
-                        <i class="fas fa-user mr-2"></i> Profile
-                    </a>
-
-                    {{-- Dropdown --}}
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="dropdown-item">
-                            <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
-                        </button>
-                    </form>
-                </div>
-            </li>
-
-            {{-- Language switcher --}}
-            <li class="nav-item dropdown" style="min-width: 50px !important; text-align: center !important;">
-                <a href="#" data-toggle="dropdown" class="nav-link">
+        <li class="nav-item dropdown">
+            <a href="#" data-toggle="dropdown" class="nav-link icon-btn !tw-px-1">
+                <div class="tw-flex tw-flex-row ">
                     @if (App::getLocale() == 'vi')
                         <span class="fi fi-vn"></span>
                     @else
                         <span class="fi fi-gb"></span>
                     @endif
                     <i class="fas fa-caret-down ml-1"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right p-0">
-                    <a href="{{ route('lang.switch', 'vi') }}"
-                        class="dropdown-item {{ App::getLocale() == 'vi' ? 'active' : '' }}">
-                        <span class="fi fi-vn"></span> Tiếng Việt
-                    </a>
-                    <a href="{{ route('lang.switch', 'en') }}"
-                        class="dropdown-item {{ App::getLocale() == 'en' ? 'active' : '' }}">
-                        <span class="fi fi-gb"></span> English
-                    </a>
                 </div>
-            </li>
-        </ul>
-    </div>
+
+            </a>
+            <div class="dropdown-menu dropdown-menu-right p-0">
+                <a href="{{ route('lang.switch', 'vi') }}"
+                    class="dropdown-item {{ App::getLocale() == 'vi' ? 'active !tw' : '' }}">
+                    <span class="fi fi-vn"></span> Tiếng Việt
+                </a>
+                <a href="{{ route('lang.switch', 'en') }}"
+                    class="dropdown-item {{ App::getLocale() == 'en' ? 'active' : '' }}">
+                    <span class="fi fi-gb"></span> English
+                </a>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <button type="button" class="nav-link icon-btn" data-widget="fullscreen" aria-label="Fullscreen">
+                <i class="fas fa-expand-arrows-alt"></i>
+            </button>
+        </li>
+    </ul>
 </nav>
-<!-- /.navbar -->

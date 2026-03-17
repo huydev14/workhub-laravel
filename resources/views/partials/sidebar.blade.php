@@ -20,19 +20,16 @@
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
                         <a href="pages/layout/top-nav.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Bảng kế toán</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Bảng lương</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="pages/layout/boxed.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Chi tiêu</p>
                         </a>
                     </li>
@@ -51,19 +48,16 @@
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
                         <a href="pages/charts/chartjs.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Xếp lô</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="pages/charts/flot.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Quản lý đơn hàng</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="pages/charts/inline.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Khách hàng</p>
                         </a>
                     </li>
@@ -81,19 +75,16 @@
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
                         <a href="pages/UI/general.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Bán hàng</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="pages/UI/general.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Phiếu hàng</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="pages/UI/icons.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Tồn kho</p>
                         </a>
                     </li>
@@ -111,19 +102,16 @@
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
                         <a href="pages/forms/general.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Tuyển dụng</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="pages/forms/advanced.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Cơ sở vật chất</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="pages/forms/editors.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Chấm công</p>
                         </a>
                     </li>
@@ -141,7 +129,6 @@
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
                         <a href="pages/tables/simple.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Cơ chế lương</p>
                         </a>
                     </li>
@@ -160,7 +147,6 @@
                     <li class="nav-item ">
                         <a href="{{ route('users.index') }}"
                             class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Danh sách nhân sự</p>
                         </a>
                     </li>
@@ -168,7 +154,6 @@
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
                         <a href="pages/tables/simple.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
                             <p>Hệ thống tài khoản</p>
                         </a>
                     </li>

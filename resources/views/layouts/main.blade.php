@@ -38,7 +38,7 @@
         @include('partials/sidebar')
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content tw-bg-gray-100">
+        <div class="content">
             <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container-fluid">
