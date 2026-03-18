@@ -5,12 +5,12 @@ namespace App\Http\Middleware;
 use App\Models\User;
 
 use Closure;
-
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Services\JwtService;
+use Illuminate\Support\Facades\Log;
 
-use Illuminate\Auth\AuthenticationException;
+use App\Services\JwtService;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
@@ -44,10 +44,13 @@ class JwtAuthenticate
             } catch (TokenBlacklistedException) {
                 $response = redirect()->route('login')->with(['status' => 'Phiên đăng nhập đã hết hạn.']);
             } catch (TokenExpiredException) {
+                dd('Da toi expired');
                 return $this->silentRefresh($request, $next, $refreshToken);
             } catch (\Exception $e) {
-                \Log::error('Lỗi xác thực không xác định: ' . $e->getMessage());
+                Log::error('Lỗi xác thực không xác định: ' . $e->getMessage());
             }
+        } elseif ($refreshToken) {
+            return $this->silentRefresh($request, $next, $refreshToken);
         }
 
         return $response;
@@ -82,7 +85,7 @@ class JwtAuthenticate
                 cookie('access_token', $newAccessToken, config('jwt.ttl'))
             );
         } catch (\Exception $e) {
-            \Log::error('Silent refresh token error: ' . $e->getMessage());
+            Log::error('Silent refresh token error: ' . $e->getMessage());
             return redirect()->route('login')
                 ->with(['status' => 'Phiên làm việc hết hạn, vui lòng đăng nhập lại.']);
         }
