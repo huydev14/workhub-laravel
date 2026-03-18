@@ -44,7 +44,6 @@ class JwtAuthenticate
             } catch (TokenBlacklistedException) {
                 $response = redirect()->route('login')->with(['status' => 'Phiên đăng nhập đã hết hạn.']);
             } catch (TokenExpiredException) {
-                dd('Da toi expired');
                 return $this->silentRefresh($request, $next, $refreshToken);
             } catch (\Exception $e) {
                 Log::error('Lỗi xác thực không xác định: ' . $e->getMessage());
