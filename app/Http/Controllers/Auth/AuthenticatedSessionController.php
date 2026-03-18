@@ -32,8 +32,6 @@ class AuthenticatedSessionController extends Controller
         $accessToken  = $this->jwtService->generateAccessToken($user);
         $refreshToken = $this->jwtService->generateRefreshToken($user);
 
-        $user->update(['refresh_token' => $refreshToken]);
-
         // Save refresh token to DB
         $user->refresh_token = $refreshToken;
         $user->save();
@@ -58,9 +56,11 @@ class AuthenticatedSessionController extends Controller
             if ($accessToken) {
                 JWTAuth::setToken($accessToken)->invalidate();
             }
-            if ($user) {
-                $user->update(['refresh_token' => null]);
-            }
+
+            // Remove refresh token to DB
+            $user->refresh_token = null;
+            $user->save();
+
         } catch (\Exception $e) {
             Log::error("Logout error: " . $e->getMessage());
         }
