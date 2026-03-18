@@ -5,16 +5,16 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item {{ request()->routeIs('dashboard') ? 'menu-open' : '' }}">
                 <a href="/" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>Dashboard</p>
+                    <x-icon-home class="nav-icon"/>
+                    <p>Home</p>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-coins"></i>
+                    <x-icon-wallet class="nav-icon"/>
                     <p>Tài chính
-                        <i class="fas fa-angle-left right"></i>
+                        <x-icon-chevron-left class="right"/>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
@@ -39,9 +39,9 @@
             {{-- Nhập hàng --}}
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-truck"></i>
+                    <x-icon-truck class="nav-icon"/>
                     <p>Nhập hàng
-                        <i class="right fas fa-angle-left"></i>
+                        <x-icon-chevron-left class="right"/>
                     </p>
                 </a>
 
@@ -67,9 +67,9 @@
             {{-- Bán hàng --}}
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="nav-icon fab fa-shopify"></i>
+                    <x-icon-shopping class="nav-icon"/>
                     <p> Bán hàng
-                        <i class="fas fa-angle-left right"></i>
+                        <x-icon-chevron-left class="right"/>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
@@ -94,9 +94,9 @@
             {{-- Hành chính nhân sự --}}
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-people-arrows"></i>
+                    <x-icon-people-building class="nav-icon"/>
                     <p>HCNS
-                        <i class="fas fa-angle-left right"></i>
+                        <x-icon-chevron-left class="right"/>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
@@ -121,9 +121,9 @@
             {{-- Cấu hình --}}
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-cog"></i>
+                    <x-icon-setting class="nav-icon"/>
                     <p>Cấu hình
-                        <i class="fas fa-angle-left right"></i>
+                        <x-icon-chevron-left class="right"/>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
@@ -138,9 +138,9 @@
             {{-- Tài khoản --}}
             <li class="nav-item {{ request()->routeIs('users.*') ? 'menu-is-opening menu-open' : '' }}">
                 <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-users-cog"></i>
+                    <x-icon-people-setting class="nav-icon"/>
                     <p>Tài khoản
-                        <i class="fas fa-angle-left right"></i>
+                        <x-icon-chevron-left class="right"/>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
