@@ -8,6 +8,10 @@
     border-right: 1px solid $border-subtle;
 
     .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
         position: relative;
         color: $text-main !important;
         border-radius: 4px;
@@ -35,12 +39,9 @@
         }
     }
 
-    .nav-sidebar > .nav-item .nav-icon {
-        font-size: 0.9rem !important;
-    }
-
-    .menu-open > .nav-link {
-        background: #fff !important;
+    .nav-icon {
+        width: 19px;
+        height: 19px;
     }
 
     .nav-treeview > .nav-item > .nav-link {
