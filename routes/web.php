@@ -5,9 +5,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-/**
- * Lang switch
- */
+// Lang switch
 Route::get('lang/{locale}', function ($locale){
     if(in_array($locale, ['en', 'vi'])){
         Session::put('locale', $locale);
@@ -18,7 +16,7 @@ Route::get('lang/{locale}', function ($locale){
 
 Route::get('/', function () {
     return view('dashboard.index');
-})->middleware(['jwt.cookie'])->name('dashboard');
+})->middleware('jwt.cookie')->name('dashboard');
 
 Route::middleware('jwt.cookie')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
