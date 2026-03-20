@@ -18,7 +18,7 @@ class RoleAndPermissionSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Permissions
+        // Permissions seeder
         $permissions = [
             'users.view',
             'users.create',
@@ -34,13 +34,27 @@ class RoleAndPermissionSeeder extends Seeder
             ]);
         }
 
-        // Create role: Super Admin
-        $superAdminRole = Role::firstOrCreate([
-            'name' => 'Super Admin',
-            'guard_name' => 'api',
-        ]);
+        // Roles seeder
+        $roleSeeder =
+            Role::firstOrCreate(
+                [
+                    'name' => 'Super Admin',
+                    'description' => 'Toàn quyền truy cập và kiểm soát mọi tính năng.',
+                    'guard_name' => 'api',
+                ],
+                [
+                    'name' => 'Manager',
+                    'description' => 'Quản lý nhân sự và truy cập các tính năng thống kê báo cáo.',
+                    'guard_name' => 'api',
+                ],
+                [
+                    'name' => 'Employee',
+                    'description' => 'Nhân viên được phép truy cập các tính năng cơ bản.',
+                    'guard_name' => 'api',
+                ],
+            );
 
-        $superAdminRole->syncPermissions(Permission::all());
+        $roleSeeder->syncPermissions(Permission::all());
 
         // Assign role to user id 1 (Super Admin)
         $user = User::find(1);
