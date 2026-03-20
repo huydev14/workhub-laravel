@@ -1,3 +1,5 @@
+@use '../base/variables' as *;
+
 #btn-clear-filters {
     background: #eef4fb;
     color: #1b5e9c;
@@ -8,5 +10,21 @@
 
     &:hover {
         background: #e2edf9;
+    }
+}
+
+.assign-role-btn{
+    color: $text-subtle;
+
+    &:hover {
+        color: $text-hover;
+    }
+}
+
+.action-button {
+    background-color: $navy-blue;
+    border-radius: 4px;
+    &:hover {
+
     }
 }

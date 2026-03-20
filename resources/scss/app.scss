@@ -9,12 +9,13 @@
 @use 'layouts/footer';
 @use 'layouts/content';
 
-// Components
-@use 'components/buttons';
-
 // Plugins
 @use 'plugins/datatables';
 @use 'plugins/select2';
+
+// Components
+@use 'components/buttons';
+@use 'components/switch';
 
 @import 'datatables.net-bs4/css/dataTables.bootstrap4.min.css';
 @import 'flag-icons/css/flag-icons.min.css';
