@@ -15,10 +15,9 @@ class RoleAndPermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Permissions seeder
+        // Create permissions
         $permissions = [
             'users.view',
             'users.create',
@@ -26,7 +25,6 @@ class RoleAndPermissionSeeder extends Seeder
             'users.delete',
         ];
 
-        // Create permissions
         foreach ($permissions as $permission) {
             Permission::firstOrCreate([
                 'name' => $permission,
@@ -34,32 +32,48 @@ class RoleAndPermissionSeeder extends Seeder
             ]);
         }
 
-        // Roles seeder
-        $roleSeeder =
+        // Create role
+        $superAdmin =
             Role::firstOrCreate(
                 [
                     'name' => 'Super Admin',
-                    'description' => 'Toàn quyền truy cập và kiểm soát mọi tính năng.',
-                    'guard_name' => 'api',
+                    'guard_name' => 'api'
                 ],
                 [
-                    'name' => 'Manager',
-                    'description' => 'Quản lý nhân sự và truy cập các tính năng thống kê báo cáo.',
-                    'guard_name' => 'api',
-                ],
-                [
-                    'name' => 'Employee',
-                    'description' => 'Nhân viên được phép truy cập các tính năng cơ bản.',
-                    'guard_name' => 'api',
+                    'description' => 'Toàn quyền quản trị hệ thống. Kiểm soát cấu hình lõi, phân quyền và dữ liệu tổ chức.',
                 ],
             );
+        $superAdmin->syncPermissions(Permission::all());
 
-        $roleSeeder->syncPermissions(Permission::all());
+        $rolesData = [
+            'Admin' => 'Quản lý tổng thể hoạt động kinh doanh. Có quyền điều hành và xem báo cáo toàn cục.',
+            'Manager' => 'Quản lý nhân sự cấp dưới, phân công và xem thống kê hiệu suất.',
+            'Employee' => 'Nhân viên được truy cập các tính năng nghiệp vụ cơ bản và xử lý công việc cá nhân.',
+        ];
 
-        // Assign role to user id 1 (Super Admin)
-        $user = User::find(1);
-        if ($user) {
-            $user->syncRoles(['Super Admin']);
+        foreach ($rolesData as $role_name => $role_description) {
+            Role::firstOrCreate(
+                [
+                    'name' => $role_name,
+                    'guard_name' => 'api'
+                ],
+                [
+                    'description' => $role_description,
+                ]
+            );
+        }
+
+        // Assign role to users ID
+        $assignRole = [
+            1 => 'Super Admin',
+            2 => 'Admin',
+            3 => 'Manager',
+            4 => 'Employee',
+        ];
+
+        foreach($assignRole as $userId => $roleName) {
+            $user = User::find($userId);
+            $user->assignRole($roleName);
         }
     }
 }
