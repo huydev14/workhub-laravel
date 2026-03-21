@@ -5,41 +5,43 @@
 @endsection
 
 @section('content')
+    <div class="fluent-card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="users-table" class="display table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Họ tên</th>
+                            <th>Email</th>
 
-        <table id="users-table" class="display table table-bordered text-nowrap">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Họ tên</th>
-                    <th>Email</th>
+                            <th>Bộ phận</th>
+                            <th>Vị trí</th>
+                            <th>Đội nhóm</th>
 
-                    <th>Bộ phận</th>
-                    <th>Vị trí</th>
-                    <th>Đội nhóm</th>
+                            <th>Loại công việc</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày kết thúc</th>
 
-                    <th>Loại công việc</th>
-                    <th>Trạng thái</th>
-                    <th>Ngày bắt đầu</th>
-                    <th>Ngày kết thúc</th>
-
-                    <th>Giới tính</th>
-                    <th>Ngày sinh</th>
-                    <th>Số điện thoại</th>
-                    <th>Địa chỉ</th>
-                    <th>Loại tài khoản</th>
-                    <th>Tác vụ</th>
-                </tr>
-            </thead>
-        </table>
-
-
+                            <th>Giới tính</th>
+                            <th>Ngày sinh</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Loại tài khoản</th>
+                            <th>Tác vụ</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <script>
         $(function() {
             let table = new DataTable('#users-table', {
                 processing: true,
                 serverSide: true,
-                scrollX: true,
                 autoWidth: false,
                 ajax: {
                     url: '{!! route('users.data') !!}',
