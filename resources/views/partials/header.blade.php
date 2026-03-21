@@ -1,4 +1,4 @@
-<nav class="header navbar navbar-expand topbar">
+<nav class="navbar navbar-expand topbar">
     <div class="brand-area">
         <button type="button" class="nav-link icon-btn" data-widget="pushmenu" aria-label="Toggle menu">
             <i class="fas fa-bars"></i>
