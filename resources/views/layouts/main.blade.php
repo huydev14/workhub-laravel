@@ -30,19 +30,37 @@
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
+        {{-- Header --}}
+        <header class="header">
+            @include('partials/header')
+        </header>
 
-        @include('partials/header')
-        @include('partials/sidebar')
+        {{-- Sidebar --}}
+        <aside class="sidebar">
+            @include('partials/sidebar')
+        </aside>
 
-        <div class="content">
-            @yield('page-header')
-
-            <div class="container-fluid">
-                @yield('content')
+        {{-- Content --}}
+        <main class="content">
+            {{-- Content header --}}
+            <div class="content-header">
+                <div class="container-fluid">
+                    @yield('page-header')
+                </div>
             </div>
-        </div>
 
-        @include('partials/footer')
+            {{-- Content body --}}
+            <div class="content-body">
+                <div class="container-fluid">
+                    @yield('content')
+                </div>
+            </div>
+        </main>
+
+        {{-- Footer --}}
+        <footer class="footer tw-text-gray-400 tw-shadow-lg">
+            @include('partials/footer')
+        </footer>
 
         {{-- Bootstrap --}}
         <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
