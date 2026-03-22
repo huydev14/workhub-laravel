@@ -51,3 +51,17 @@
     border-radius: 4px;
     font-weight: 500;
 }
+
+.fluent-toolbar {
+    .toolbar-btn-primary {
+        padding: 10px 12px;
+    }
+    #custom-search-input  {
+        &:focus,
+        &:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+    }
+}

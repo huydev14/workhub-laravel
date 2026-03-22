@@ -11,6 +11,9 @@
     &:hover {
         background: #e2edf9;
     }
+    &:active {
+    transform: scale(0.98);
+}
 }
 
 .assign-role-btn{

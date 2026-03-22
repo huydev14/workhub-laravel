@@ -5,25 +5,84 @@
 @endsection
 
 @section('content')
-    <div class="fluent-card">
-        <div class="card-body">
+    <div class="fluent-card tw-mt-4">
+        <div class="card-header tw-bg-white tw-border-b-0">
+            <div class="fluent-toolbar tw-flex tw-items-center tw-w-full tw-gap-4 tw-border-b tw-border-gray-200">
+                <div class="tw-relative tw-flex-1">
+                    <div class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-3 tw-pointer-events-none">
+                        <i class="fas fa-search tw-text-gray-400"></i>
+                    </div>
+                    <input type="text" id="custom-search-input" placeholder="Search table..."
+                        class="tw-w-full tw-pl-10 tw-pr-3 tw-py-2 tw-text-sm tw-text-gray-900 tw-bg-transparent tw-border-none">
+                </div>
+
+                <button id="toggle-filter-btn" class="tw-text-gray-500 hover:tw-text-[#0f6cbd] tw-px-1 tw-transition-colors"
+                    title="Filter">
+                    <i class="fas fa-filter"></i>
+                </button>
+
+                <div class="tw-h-6 tw-w-px tw-bg-gray-300"></div>
+
+                <div class="tw-flex tw-items-center tw-gap-5 tw-px-2">
+                    <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors"
+                        onclick="table.ajax.reload()"><i class="fas fa-sync-alt">
+                        </i>
+                    </button>
+                    <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+
+                <button
+                    class="toolbar-btn-primary tw-flex tw-items-center tw-gap-8 tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-font-medium tw-text-sm tw-transition-colors tw-shadow-sm">
+                    <span>Create</span>
+                    <i class="fas fa-plus tw-text-xs"></i>
+                </button>
+            </div>
+
+            <div id="filter-panel" class="tw-hidden tw-pt-5 tw-pb-2">
+
+                <div class="tw-flex tw-justify-between tw-items-center tw-mb-5">
+                    <h4 class="tw-text-base tw-font-bold tw-text-gray-800">Filter</h4>
+                    <div class="tw-flex tw-items-center tw-gap-4">
+                        <button id="btn-clear-filters"
+                            class="tw-text-sm tw-text-blue-600 hover:tw-text-blue-800 tw-font-medium">
+                            Clear all
+                        </button>
+                        <button id="close-filter-btn" class="tw-text-gray-400 hover:tw-text-gray-700 tw-transition-colors">
+                            <i class="fas fa-times tw-text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-x-8 tw-gap-y-6">
+                    <x-filter-select id="f_status" label="Trạng thái" />
+                    <x-filter-select id="f_department" label="Bộ phận" />
+                    <x-filter-select id="f_team" label="Đội nhóm" />
+                    <x-filter-select id="f_account_type" label="Loại tài khoản" />
+                </div>
+            </div>
+        </div>
+
+        {{-- Users datatable --}}
+        <div class="card-body tw-pt-0">
             <div class="table-responsive">
-                <table id="users-table" class="display table table-hover text-nowrap">
+                <table id="users-table" class="display table table-hover text-nowrap" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Họ tên</th>
                             <th>Email</th>
-
                             <th>Bộ phận</th>
                             <th>Vị trí</th>
                             <th>Đội nhóm</th>
-
                             <th>Loại công việc</th>
                             <th>Trạng thái</th>
                             <th>Ngày bắt đầu</th>
                             <th>Ngày kết thúc</th>
-
                             <th>Giới tính</th>
                             <th>Ngày sinh</th>
                             <th>Số điện thoại</th>
@@ -39,7 +98,7 @@
 
     <script>
         $(function() {
-            let table = new DataTable('#users-table', {
+            window.table = new DataTable('#users-table', {
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -125,36 +184,30 @@
                         searchable: false
                     }
                 ],
-                language: {
-                    "processing": "{{ __('datatables.processing') }}",
-                    "search": "{{ __('datatables.search') }}",
-                    "lengthMenu": "{{ __('datatables.lengthMenu') }}",
-                    "info": "{{ __('datatables.info') }}",
-                    "infoEmpty": "{{ __('datatables.infoEmpty') }}",
-                    "infoFiltered": "{{ __('datatables.infoFiltered') }}",
-                    "zeroRecords": "{{ __('datatables.zeroRecords') }}",
-                    "loadingRecords": "{{ __('datatables.loadingRecords') }}",
-                },
+
                 layout: {
-                    topStart: 'pageLength',
-                    topEnd: [{
-                            search: {
-                                placeholder: "{{ __('datatables.search_for_employee') }}"
-                            }
-                        },
-                        $(`<div class="dt-toolbar d-flex">
-                            <select id="f_status" class="form-select"><option value="">Trạng thái</option></select>
-                            <select id="f_department" class="form-select"><option value="">Bộ phận</option></select>
-                            <select id="f_team" class="form-select"><option value="">Đội nhóm</option></select>
-                            <select id="f_account_type" class="form-select"><option value="">Loại tài khoản</option></select>
-                            <button id="btn-clear-filters" class="btn btn-sm">Xoá lọc</button>
-                        </div>`)
-                    ],
-                    bottomStart: 'info',
+                    topStart: null,
+                    topEnd: null,
+                    bottomStart: 'pageLength',
                     bottomEnd: 'paging',
                 },
             });
 
+            $('#custom-search-input').on('keyup', function() {
+                table.search(this.value).draw();
+            });
+
+            // Filter panel toggle
+            $('#toggle-filter-btn').on('click', function() {
+                $('#filter-panel').slideToggle('fast');
+                $(this).toggleClass('tw-text-[#0f6cbd] tw-bg-blue-50 tw-rounded');
+
+                // Reset filter
+                $('#f_status, #f_department, #f_team, #f_account_type').val('').trigger('change.select2');
+                table.ajax.reload();
+            });
+
+            // Get data for select2
             $.getJSON('{!! route('users.filter_data') !!}')
                 .done(function(res) {
                     fill('#f_status', res.status_data);
@@ -164,31 +217,28 @@
 
                     function fill(selector, items) {
                         let element = $(selector);
-
-                        if (!items) {
-                            items = [];
-                        }
+                        if (!items) items = [];
                         items.forEach(item => {
-                            let option = new Option(item.text, item.id);
-                            element.append(option);
+                            element.append(new Option(item.text, item.id));
                         })
                     }
 
                     $('#f_status, #f_department, #f_team, #f_account_type').select2({
-                        theme: 'bootstrap4'
+                        theme: 'bootstrap4',
+                        minimumResultsForSearch: 10,
+                        width: '100%'
                     });
-                })
-                .fail(function(err) {
-                    console.error('Fail to get data for filters: ', err);
-                })
+                });
 
-            $(document).on('change', '.dt-toolbar select', function() {
+            $(document).on('change', '#filter-panel select', function() {
                 table.ajax.reload();
-            })
+            });
+
+            // Clear filter
             $(document).on('click', '#btn-clear-filters', function() {
-                $('#f_status, #f_department, #f_team, #f_account_type').val('');
+                $('#f_status, #f_department, #f_team, #f_account_type').val('').trigger('change.select2');
                 table.ajax.reload();
-            })
+            });
         });
     </script>
 @endsection

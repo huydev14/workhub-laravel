@@ -1,14 +1,32 @@
-@use '../base/variables' as *;
+#filter-panel {
+    .select2-container--bootstrap4 .select2-selection {
+        background-color: #f3f4f6 !important;
+        border: none !important;
+        border-bottom: 1px solid #9ca3af !important;
+        border-radius: 2px 2px 0 0 !important;
+        height: 40px !important;
+        min-height: 40px !important;
+        box-shadow: none !important;
+        transition: all 0.2s ease;
+    }
 
-.select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
-    line-height: 32px;
-    color: $text-main;
+    .select2-container--bootstrap4 .select2-selection:hover {
+        background-color: #e5e7eb !important;
+        border-bottom-color: #6b7280 !important;
+    }
+
+    .select2-container--bootstrap4.select2-container--focus .select2-selection,
+    .select2-container--bootstrap4.select2-container--open .select2-selection {
+        background-color: #e5e7eb !important;
+        border-bottom: 2px solid #0f6cbd !important;
+        box-shadow: none !important;
+    }
+
+
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+        line-height: 40px !important;
+        color: #374151 !important;
+        padding-left: 12px;
+        font-size: 14px;
+    }
 }
-
-.select2-container--bootstrap4 .select2-selection {
-    min-width: 150px;
-    height: 34px;
-    border-radius: 4px;
-    border-color: #c8d0db;
-}
-
