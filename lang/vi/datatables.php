@@ -6,6 +6,7 @@ return [
     'infoFiltered'   => '(lọc từ _MAX_ tổng số bản ghi)',
     'lengthMenu'     => 'Hiển thị _MENU_ bản ghi mỗi trang',
     'search'         => 'Tìm kiếm:',
+    'search_for_employee' => 'Tìm kiếm nhân viên',
     'zeroRecords'    => 'Không tìm thấy dữ liệu phù hợp',
     'processing'     => 'Đang tải...',
     'loadingRecords' => 'Đang tải dữ liệu...',
