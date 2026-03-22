@@ -139,7 +139,7 @@
                     topStart: 'pageLength',
                     topEnd: [{
                             search: {
-                                placeholder: 'Tìm kiếm nhân viên...'
+                                placeholder: "{{ __('datatables.search_for_employee') }}"
                             }
                         },
                         $(`<div class="dt-toolbar d-flex">
