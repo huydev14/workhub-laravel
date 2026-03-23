@@ -1,4 +1,6 @@
 {{-- Component: Toolbar --}}
+@props(['target' => null])
+
 <div class="fluent-toolbar tw-flex tw-items-center tw-w-full tw-gap-4 tw-border-b tw-border-gray-200">
     <div class="tw-relative tw-flex-1">
         <div class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-3 tw-pointer-events-none">
@@ -27,5 +29,5 @@
         </button>
     </div>
 
-    <x-create-button />
+    <x-create-button :target="$target"/>
 </div>
