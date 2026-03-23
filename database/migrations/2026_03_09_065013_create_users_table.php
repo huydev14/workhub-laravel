@@ -22,7 +22,6 @@ return new class extends Migration
             $table->rememberToken()->nullable();
 
             // Organization structure
-            $table->foreignId('account_type_id')->nullable()->constrained('account_types')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('position_id')->nullable()->constrained('positions')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('team_id')->nullable()->constrained('teams')->cascadeOnUpdate()->nullOnDelete();

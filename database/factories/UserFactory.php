@@ -5,7 +5,6 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\AccountType;
 use App\Models\Department;
 use App\Models\Position;
 use App\Models\Team;
@@ -37,7 +36,6 @@ class UserFactory extends Factory
             'remember_token' => null,
             'refresh_token'  => null,
 
-            'account_type_id' => AccountType::inRandomOrder()->first()?->id ?? 1,
             'department_id'   => Department::inRandomOrder()->first()?->id ?? 1,
             'position_id'     => Position::inRandomOrder()->first()?->id ?? 1,
             'team_id'     => Team::inRandomOrder()->first()?->id ?? 1,

@@ -16,7 +16,6 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'account_type_id',
         'department_id',
         'position_id',
         'team_id',
@@ -78,10 +77,5 @@ class User extends Authenticatable implements JWTSubject
     public function team()
     {
         return $this->belongsTo(Team::class, 'team_id');
-    }
-
-    public function accountType()
-    {
-        return $this->belongsTo(AccountType::class, 'account_type_id');
     }
 }
