@@ -10957,9 +10957,9 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
 .text-sm .main-footer {
     padding: 0.812rem;
 }
-.content-header {
+/* .content-header {
     padding: 15px 0.5rem;
-}
+} */
 .text-sm .content-header {
     padding: 10px 0.5rem;
 }
