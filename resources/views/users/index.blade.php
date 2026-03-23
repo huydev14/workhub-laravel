@@ -4,7 +4,8 @@
     <div class="fluent-card">
         <div class="card-header tw-bg-white tw-border-b-0">
 
-            <x-toolbar />
+            {{-- Toolbar --}}
+            <x-toolbar target="slideover-create-user" />
 
             <div id="filter-panel" class="tw-hidden tw-pt-5 tw-pb-2">
 
@@ -44,13 +45,19 @@
                         <th>Trạng thái</th>
                         <th>Số điện thoại</th>
                         <th>Loại tài khoản</th>
-                        <th><div class="tw-text-center">Tác vụ</div></th>
+                        <th>
+                            <div class="tw-text-center">Tác vụ</div>
+                        </th>
                     </tr>
                 </thead>
             </table>
-            {{-- </div> --}}
         </div>
     </div>
+
+    {{-- Create user form --}}
+    <x-slide-over id="slideover-create-user" title="Thêm nhân viên mới">
+        @include('users.create')
+    </x-slide-over>
 
     <script>
         $(function() {
@@ -162,7 +169,8 @@
                 $(this).toggleClass('tw-text-[#0f6cbd] tw-bg-blue-50 tw-rounded');
 
                 // Reset filter
-                $('#f_status, #f_department, #f_employment_type, #f_role').val('').trigger('change.select2');
+                $('#f_status, #f_department, #f_employment_type, #f_role').val('').trigger(
+                    'change.select2');
                 table.ajax.reload();
             });
 
@@ -195,7 +203,8 @@
 
             // Clear filter
             $(document).on('click', '#btn-clear-filters', function() {
-                $('#f_status, #f_department, #f_employment_type, #f_role').val('').trigger('change.select2');
+                $('#f_status, #f_department, #f_employment_type, #f_role').val('').trigger(
+                    'change.select2');
                 table.ajax.reload();
             });
         });
