@@ -102,6 +102,7 @@ class UserController extends Controller
                 'birthday' => 'nullable|date',
                 'address'  => 'nullable|string|max:255',
                 'gender'   => 'required|in:0,1',
+                'department_id' => 'required|exists:departments,id',
                 'start_date' => 'nullable|date',
                 'employment_type' => 'required|in:0,1',
             ],
@@ -113,6 +114,8 @@ class UserController extends Controller
                 'password.required' => 'Vui lòng tạo mật khẩu đăng nhập.',
                 'password.min'    => 'Mật khẩu phải có ít nhất 6 ký tự.',
                 'gender.required' => 'Vui lòng chọn giới tính.',
+                'department_id.required' => 'Vui lòng chọn phòng ban.',
+                'department_id.exists' => 'Phòng ban không hợp lệ.',
                 'employment_type.required' => 'Vui lòng chọn hình thức làm việc.',
             ]
         );
