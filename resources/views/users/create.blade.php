@@ -19,6 +19,7 @@
             <div class="tw-grid tw-grid-cols-2 tw-gap-4">
                 <x-input type="tel" id="phone" name="phone" label="Số điện thoại" icon="fas fa-phone-alt"
                     placeholder="09xx..." />
+
                 <x-input type="date" id="birthday" name="birthday" label="Ngày sinh" />
             </div>
 
@@ -112,16 +113,16 @@
                 url: '{{ route('users.filter_data') }}',
                 success: function(res) {
                     let departmentSelect = $('#form-create-user select[name="department_id"]');
+                    let html = '';
 
                     // Reset option selected
                     departmentSelect.find('option:not([value=""])').remove();
 
                     // Apply data to options
-                    $.each(res.department_data, function(index, item) {
-                        departmentSelect.append(
-                            $('<option></option>').val(item.id).text(item.text)
-                        );
+                    $.each(res.department_data, function(i, item) {
+                        html += `<option value="${item.id}">${item.text}</option>`;
                     });
+                    departmentSelect.append(html);
                 },
                 error: function(xhr) {
                     console.error('Không có dữ liệu phòng ban')
