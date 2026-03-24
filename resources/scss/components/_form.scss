@@ -1,0 +1,87 @@
+@use '../base/variables' as *;
+
+/*
+* Reuseable class for form submit
+*/
+
+$fluent-neutral-primary: #323130;
+
+// ---- Label -----------------------
+.fluent-label {
+    display: inline-block;
+    font-size: 0.85rem !important;
+    font-weight: 400;
+    padding: 0;
+    margin-bottom: 4px;
+    line-height: 1.2;
+    color: $black;
+
+    &.is-required::after {
+        content: ' *';
+        color: $red;
+        font-weight: 400;
+    }
+
+    &.is-disabled {
+        color: #a19f9d;
+    }
+}
+
+// ---- Submit button ---------------------
+.fluent-btn-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 96px;
+    padding: 0.3rem 1rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+
+    color: #fff;
+    background-color: $blue;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        cursor: pointer;
+        background-color: $blue-hover;
+    }
+
+    &:active {
+        background-color: $blue-active;
+        transform: scale(0.98);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $blue;
+        outline-offset: 2px;
+    }
+}
+// ---- Cancel button ---------------------
+.fluent-btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 70px;
+    padding: 0.3rem 1rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+
+    color: $fluent-neutral-primary;
+    background-color: #ffffff;
+    border: 1px solid $neutral-quaternary;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: $neutral-light;
+    }
+
+    &:active {
+        background-color: #edebe9;
+        transform: scale(0.98);
+    }
+}
