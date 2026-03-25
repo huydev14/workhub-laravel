@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name') }}</title>
 
     <!-- Google Font: Source Sans Pro -->
@@ -30,26 +31,21 @@
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-        {{-- Header --}}
         <header class="header">
             @include('partials/header')
         </header>
 
-        {{-- Sidebar --}}
         <aside class="sidebar">
             @include('partials/sidebar')
         </aside>
 
-        {{-- Content --}}
         <main class="content">
-            {{-- Content header --}}
             <div class="content-header">
                 <div class="container-fluid">
                     @yield('page-header')
                 </div>
             </div>
 
-            {{-- Content body --}}
             <div class="content-body">
                 <div class="container-fluid">
                     @yield('content')
@@ -57,18 +53,13 @@
             </div>
         </main>
 
-        {{-- Footer --}}
         <footer class="footer tw-text-gray-400 tw-shadow-lg">
             @include('partials/footer')
         </footer>
 
-        {{-- Bootstrap --}}
         <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <!-- AdminLTE -->
         <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
-        <!-- OPTIONAL SCRIPTS -->
         <script src="{{ asset('adminlte/plugins/chart.js/Chart.min.js') }}"></script>
-        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
         <script src="{{ asset('adminlte/dist/js/pages/dashboard3.js') }}"></script>
 
         @stack('scripts')

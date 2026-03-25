@@ -8,6 +8,7 @@ use Yajra\DataTables\DataTables;
 use App\Models\Department;
 use App\Models\Team;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
@@ -16,7 +17,6 @@ class UserController extends Controller
 {
     public function index()
     {
-
         return view('users.index',);
     }
 
@@ -164,6 +164,31 @@ class UserController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại!',
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            // Prevent delete myself
+            if (Auth::id() === $user->id) {
+                return response()->json([
+                    'message' => 'Không thể tự xóa tài khoản của chính mình!'
+                ], 403);
+            }
+
+            $user->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Xóa tài khoản thành công.'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi hệ thống !'
             ], 500);
         }
     }

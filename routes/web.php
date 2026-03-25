@@ -27,12 +27,14 @@ Route::middleware('jwt.cookie')->group(function () {
 
 require __DIR__ . '/auth.php';
 
+// USER ROUTES
 Route::middleware('jwt.cookie')->prefix('users')->name('users.')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('index');
     Route::get('/data', [UserController::class, 'data'])->name('data');
     Route::get('/filter-data', [UserController::class, 'getFilterData'])->name('filter_data');
 
     Route::post('/create', [UserController::class, 'store'])->name('store');
+    Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
 });
 
 Route::middleware('jwt.cookie')->group(function(){

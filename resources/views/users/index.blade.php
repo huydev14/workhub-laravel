@@ -65,6 +65,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
+                order: [[0, 'desc']],
                 ajax: {
                     url: '{!! route('users.data') !!}',
                     data: function(d) {
@@ -75,10 +76,8 @@
                     }
                 },
                 columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        sortable: false,
-                        searchable: false
+                        data: 'id',
+                        name: 'id',
                     },
                     {
                         data: 'name',
@@ -232,6 +231,34 @@
                     'change.select2');
                 table.ajax.reload();
             });
+
+            // ---- Delete user ------------------------
+            $(document).on('click', '#delete-user-btn', function() {
+                let $btn = $(this);
+                let deleteUrl = $btn.data('delete-url');
+
+                if(!confirm('Confirm delete?')){
+                    return;
+                }
+
+                $btn.prop('disabled', true);
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: deleteUrl,
+                    success: function(res) {
+                        alert('Xóa nhân viên thành công');
+                        table.ajax.reload(null, false);
+                    },
+                    error: function(xhr) {
+                        console.error('Load error:', xhr.status)
+                        console.error('Load error:', xhr.responseText)
+                    },
+                    complete: function() {
+                        $btn.prop('disabled', false);
+                    }
+                });
+            })
         });
     </script>
 @endsection
