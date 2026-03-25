@@ -117,6 +117,7 @@ class UserController extends Controller
                 'gender'   => 'required|in:0,1',
                 'department_id' => 'required|exists:departments,id',
                 'team_id' => 'nullable|exists:teams,id',
+                'role_id' => 'nullable|exists:roles,id',
                 'start_date' => 'nullable|date',
                 'employment_type' => 'required|in:0,1',
             ],
@@ -131,6 +132,7 @@ class UserController extends Controller
                 'department_id.required' => 'Vui lòng chọn phòng ban.',
                 'department_id.exists' => 'Phòng ban không hợp lệ.',
                 'team_id.exists' => 'Đội nhóm không hợp lệ.',
+                'role_id.exists' => 'Loại tài khoản không hợp lệ.',
                 'employment_type.required' => 'Vui lòng chọn hình thức làm việc.',
             ]
         );
@@ -139,7 +141,15 @@ class UserController extends Controller
             $data['password'] = Hash::make($data['password']);
             $data['status'] = 0;
 
-            User::create($data);
+            $roleId = $data['role_id'] ?? null;
+            unset($data['role_id']);
+
+            $user = User::create($data);
+
+            if ($roleId) {
+                $role = Role::findById($roleId);
+                $user->assignRole($role);
+            }
 
             return response()->json([
                 'status' => 'success',
