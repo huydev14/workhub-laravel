@@ -3,7 +3,7 @@
         <x-icon-edit />
     </button>
 
-    <button type="button" title="Xóa" data-user-id="{{ $user->id }}"
+    <button id="delete-user-btn" type="button" title="Xóa" data-delete-url="{{ route('users.destroy', $user->id) }}"
         class="user-action-btn user-action-btn--delete">
         <x-icon-delete />
     </button>
