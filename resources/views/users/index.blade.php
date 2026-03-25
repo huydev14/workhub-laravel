@@ -33,7 +33,6 @@
 
         {{-- Users datatable --}}
         <div class="card-body tw-pt-0">
-            {{-- <div class="table-responsive"> --}}
             <table id="users-table" class="display table table-hover text-nowrap" style="width: 100%;">
                 <thead>
                     <tr>
@@ -61,6 +60,7 @@
 
     <script>
         $(function() {
+            // ---- RENDER TABLE --------------------------
             window.table = new DataTable('#users-table', {
                 processing: true,
                 serverSide: true,
@@ -163,7 +163,7 @@
                 table.search(this.value).draw();
             });
 
-            // Filter panel toggle
+            // ---- FILTER PANEL TOGGLE ---------------------------
             $('#toggle-filter-btn').on('click', function() {
                 $('#filter-panel').slideToggle('fast');
                 $(this).toggleClass('tw-text-[#0f6cbd] tw-bg-blue-50 tw-rounded');
@@ -174,20 +174,40 @@
                 table.ajax.reload();
             });
 
-            // Get data for select2
+            // ---- RENDER OPTIONS FOR SELECT FIELDs ----------------
             $.getJSON('{!! route('users.filter_data') !!}')
                 .done(function(res) {
-                    fill('#f_department', res.department_data);
-                    fill('#f_status', res.status_data);
-                    fill('#f_employment_type', res.employment_type_data);
-                    fill('#f_role', res.role_data);
+                    renderOptions('#f_department', res.department_data);
+                    renderOptions('#f_status', res.status_data);
+                    renderOptions('#f_employment_type', res.employment_type_data);
+                    renderOptions('#f_role', res.role_data);
+                    renderOptions('#create-department', res.department_data);
+                    renderOptions('#create-team', res.team_data);
 
-                    function fill(selector, items) {
-                        let element = $(selector);
+                    $('#create-department').on('change', function() {
+                        let departmentId = $(this).val();
+
+                        $.getJSON('{{ route('users.filter_data') }}', {
+                                department_id: departmentId
+                            })
+                            .done(function(res) {
+                                renderOptions('#create-team', res.team_data)
+                            });
+                    })
+
+                    function renderOptions(selector, items) {
+                        let $selector = $(selector);
                         if (!items) items = [];
+
+                        // Reset select
+                        $selector.find('option:not([value=""])').remove();
+                        $selector.val('');
+
+                        let html = '';
                         items.forEach(item => {
-                            element.append(new Option(item.text, item.id));
+                            html += `<option value="${item.id}">${item.text}</option>`
                         })
+                        $selector.append(html);
                     }
 
                     $('#f_status, #f_department, #f_employment_type, #f_role').select2({
@@ -195,6 +215,10 @@
                         minimumResultsForSearch: 10,
                         width: '100%'
                     });
+                })
+                .fail(function(xhr) {
+                    console.error('Load error:', xhr.status)
+                    console.error('Load error:', xhr.responseText)
                 });
 
             $(document).on('change', '#filter-panel select', function() {
