@@ -10,6 +10,14 @@
         </div>
     @endif
 
+    @push('scripts')
+        <script>
+            $(document).on('click', '.noti-box', function() {
+                $(this).addClass('tw-hidden');
+            });
+        </script>
+    @endpush
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
