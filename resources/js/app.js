@@ -6,7 +6,3 @@ window.Alpine = Alpine;
 Alpine.start();
 
 window.DataTable = DataTable;
-
-$(document).on('click', '.noti-box', function() {
-	$(this).addClass('tw-hidden');
-});
