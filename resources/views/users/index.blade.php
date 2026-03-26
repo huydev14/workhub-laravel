@@ -65,7 +65,9 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                order: [[0, 'desc']],
+                order: [
+                    [0, 'desc']
+                ],
                 ajax: {
                     url: '{!! route('users.data') !!}',
                     data: function(d) {
@@ -237,7 +239,7 @@
                 let $btn = $(this);
                 let deleteUrl = $btn.data('delete-url');
 
-                if(!confirm('Confirm delete?')){
+                if (!confirm('Confirm delete?')) {
                     return;
                 }
 
@@ -247,10 +249,21 @@
                     type: 'DELETE',
                     url: deleteUrl,
                     success: function(res) {
-                        alert('Xóa nhân viên thành công');
                         table.ajax.reload(null, false);
+                        fluentToast({
+                            type: 'success',
+                            title: 'Thành công',
+                            description: 'Bạn đã xoá nhân viên thành công',
+                            actionType: 'close',
+                        });
                     },
                     error: function(xhr) {
+                        fluentToast({
+                            type: 'error',
+                            title: 'Đã xảy ra lỗi!',
+                            description: 'Hãy thử lại sau',
+                            actionType: 'close'
+                        });
                         console.error('Load error:', xhr.status)
                         console.error('Load error:', xhr.responseText)
                     },
