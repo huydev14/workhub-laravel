@@ -53,9 +53,9 @@
             <h3 class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wider">
                 Thông tin công việc
             </h3>
-            <x-select title="Phòng ban" id="create-department" name="department_id" />
+            <x-select title="Phòng ban" id="create-department" name="department_id" required />
             <x-select title="Đội nhóm" id="create-team" name="team_id" />
-            <x-select title="Loại tài khoản" id="create-user-role" name="role_id" />
+            <x-select title="Loại tài khoản" id="create-user-role" name="role_id" required />
 
             <div class="tw-grid tw-grid-cols-2 tw-gap-4"></div>
 
@@ -141,7 +141,12 @@
                                 window.table.ajax.reload(null, false);
                             }
 
-                            alert(res.message);
+                            fluentToast({
+                                type: 'success',
+                                title: 'Thành công',
+                                description: 'Bạn đã thêm nhân viên thành công',
+                                actionType: 'close',
+                            });
                         }
                     },
                     error: function(xhr) {
@@ -167,8 +172,19 @@
                                     );
                                 }
                             });
+                            fluentToast({
+                                type: 'error',
+                                title: 'Thêm thất bại',
+                                description: 'Hãy kiểm tra lại thông tin!',
+                                actionType: 'close',
+                            });
                         } else {
-                            alert('Đã xảy ra lỗi hệ thống. Vui lòng thử lại!');
+                            fluentToast({
+                                type: 'error',
+                                title: 'Lỗi hệ thống',
+                                description: 'Hãy thử lại sau!',
+                                actionType: 'close',
+                            });
                         }
                     }
                 })

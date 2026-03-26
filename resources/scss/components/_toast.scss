@@ -1,0 +1,97 @@
+@use '../base/variables' as *;
+
+/* =========================================
+   MICROSOFT FLUENT UI TOAST (DÙNG BIẾN SCSS)
+========================================= */
+.fluent-toast-card {
+    @apply tw-flex tw-items-start tw-justify-between tw-bg-white tw-px-4 tw-py-3;
+    pointer-events: auto;
+    min-width: 320px;
+    border-radius: 4px;
+
+    box-shadow: $shadow-depth-16;
+
+    transform: translateX(120%);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+
+    &.show {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .toast-left {
+        @apply tw-flex tw-items-start tw-gap-3;
+    }
+
+    .toast-icon {
+        font-size: 16px;
+        margin-top: 2px;
+
+        &.success {
+            color: #107c10;
+        }
+        &.warning {
+            color: #d83b01;
+        }
+        &.error {
+            color: $red;
+        }
+        &.info {
+            color: $text-subtle;
+        }
+    }
+
+    .toast-text-container {
+        @apply tw-flex tw-flex-col tw-gap-1;
+    }
+
+    .toast-title {
+        @apply tw-text-sm tw-font-semibold;
+        color: $text-main;
+        line-height: 1.4;
+    }
+
+    .toast-description {
+        @apply tw-text-sm;
+        color: $text-subtle;
+        line-height: 1.4;
+    }
+
+    .toast-subtitle {
+        @apply tw-text-xs;
+        color: $text-subtle;
+        opacity: 0.8;
+        margin-top: 2px;
+    }
+
+    .toast-action {
+        @apply tw-ml-4;
+
+        button {
+            @apply tw-bg-transparent tw-text-sm tw-font-semibold tw-transition-colors;
+            cursor: pointer;
+            border: none;
+            &.link-btn {
+                color: $blue;
+
+                &:hover {
+                    color: $blue-active;
+                    text-decoration: none;
+                }
+            }
+
+
+            &.close-btn {
+                color: $text-subtle;
+                font-size: 16px;
+                @apply tw-px-1;
+
+                &:hover {
+                    background-color: $hover-bg;
+                    color: $text-main;
+                }
+            }
+        }
+    }
+}

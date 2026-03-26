@@ -57,11 +57,14 @@
             @include('partials/footer')
         </footer>
 
+        <div id="fluent-toast-container"
+            class="tw-fixed tw-top-6 tw-right-6 tw-z-[9999] tw-flex tw-flex-col tw-gap-3 tw-pointer-events-none"></div>
+
         <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
         <script src="{{ asset('adminlte/plugins/chart.js/Chart.min.js') }}"></script>
         <script src="{{ asset('adminlte/dist/js/pages/dashboard3.js') }}"></script>
-
+        <script src="{{ asset('js/toast.js') }}"></script>
         @stack('scripts')
 </body>
 
