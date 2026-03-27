@@ -44,6 +44,20 @@
 
     .toast-text-container {
         @apply tw-flex tw-flex-col tw-gap-1;
+
+        .toast-bottom-actions {
+            @apply tw-mt-1 tw-flex tw-items-center tw-gap-4;
+
+            button.bottom-action-btn {
+                @apply tw-cursor-pointer tw-border-none tw-bg-transparent tw-p-0 tw-text-sm tw-font-semibold tw-transition-colors;
+                color: $blue;
+
+                &:hover {
+                    color: $blue-active; 
+                    text-decoration: none;
+                }
+            }
+        }
     }
 
     .toast-title {
@@ -80,7 +94,6 @@
                     text-decoration: none;
                 }
             }
-
 
             &.close-btn {
                 color: $text-subtle;

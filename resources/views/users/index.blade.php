@@ -251,10 +251,17 @@
                     success: function(res) {
                         table.ajax.reload(null, false);
                         fluentToast({
-                            type: 'success',
-                            title: 'Thành công',
-                            description: 'Bạn đã xoá nhân viên thành công',
+                            type: 'info',
+                            title: 'Đã xóa nhân viên',
+                            description: 'Tài khoản nhân viên đã được chuyển vào thùng rác.',
+                            subtitle: res.status,
                             actionType: 'close',
+                            bottomActions: [{
+                                text: 'Hoàn tác',
+                                onClick: function() {
+                                    // TODO: add restore user function
+                                }
+                            }]
                         });
                     },
                     error: function(xhr) {

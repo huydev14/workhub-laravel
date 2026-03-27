@@ -139,16 +139,24 @@
                             // Reload user datatable
                             if (typeof window.table !== 'undefined') {
                                 window.table.ajax.reload(null, false);
-                            }
+                            };
 
                             fluentToast({
                                 type: 'success',
-                                title: 'Thành công',
-                                description: 'Bạn đã thêm nhân viên thành công',
+                                title: 'Thêm nhân viên thành công',
+                                description: 'Tài khoản đã được cấp quyền truy cập vào hệ thống.',
+                                subtitle: res.status,
                                 actionType: 'close',
+                                bottomActions: [{
+                                    text: 'Xem hồ sơ',
+                                    onClick: function() {
+                                        // TODO: redirect to user profile
+                                    }
+                                }]
                             });
                         }
                     },
+
                     error: function(xhr) {
                         submitBtn.prop('disabled', false).html(originalBtnText);
 
@@ -165,24 +173,30 @@
                                         .removeClass('tw-border-gray-300')
                                         .addClass('tw-border-red-500');
 
-                                    wrapper.append(
-                                        `<span class="field-error tw-block tw-text-red-500 tw-text-xs tw-mt-1 tw-font-medium">
-                                            ${messages[0]}
-                                        </span>`
-                                    );
+                                    wrapper.append(`
+                                        <span class="field-error tw-block tw-text-red-500 tw-text-xs tw-mt-1 tw-font-medium">
+                                                ${messages[0]}
+                                        </span>`);
                                 }
                             });
+
                             fluentToast({
                                 type: 'error',
-                                title: 'Thêm thất bại',
-                                description: 'Hãy kiểm tra lại thông tin!',
-                                actionType: 'close',
+                                title: 'Thêm nhân viên thất bại',
+                                description: 'Hãy kiểm tra lại các trường thông tin',
+                                subtitle: xhr.status,
+                                actionType: 'link',
+                                actionText: 'Undo',
+                                onAction: function() {
+                                    console.log('Test');
+                                },
                             });
                         } else {
                             fluentToast({
                                 type: 'error',
                                 title: 'Lỗi hệ thống',
                                 description: 'Hãy thử lại sau!',
+                                subtitle: xhr.status,
                                 actionType: 'close',
                             });
                         }
