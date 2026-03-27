@@ -238,6 +238,7 @@
             $(document).on('click', '#delete-user-btn', function() {
                 let $btn = $(this);
                 let deleteUrl = $btn.data('delete-url');
+                let restoreUrl = $btn.data('restore-url');
 
                 if (!confirm('Confirm delete?')) {
                     return;
@@ -258,8 +259,32 @@
                             actionType: 'close',
                             bottomActions: [{
                                 text: 'Hoàn tác',
+
+                                // Restore soft-deleted user
                                 onClick: function() {
-                                    // TODO: add restore user function
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: restoreUrl,
+                                        success: function(res) {
+                                            table.ajax.reload(
+                                                null, false);
+
+                                            fluentToast({
+                                                type: 'success',
+                                                title: 'Hoàn tác thành công',
+                                                description: 'Tài khoản nhân viên đã được khôi phục hoạt động.',
+                                                actionType: 'close',
+                                            });
+                                        },
+                                        error: function(xhr) {
+                                            fluentToast({
+                                                type: 'error',
+                                                title: 'Lỗi khôi phục',
+                                                description: 'Không thể hoàn tác thao tác này.',
+                                                subtitle: 'Mã lỗi: ' + xhr.status,
+                                            });
+                                        }
+                                    })
                                 }
                             }]
                         });
@@ -269,6 +294,7 @@
                             type: 'error',
                             title: 'Đã xảy ra lỗi!',
                             description: 'Hãy thử lại sau',
+                            subtitle: 'Mã lỗi: ' + xhr.status,
                             actionType: 'close'
                         });
                         console.error('Load error:', xhr.status)

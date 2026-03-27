@@ -153,7 +153,7 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Thêm nhân viên thành công.',
+                'message' => 'Thêm nhân viên thành công',
             ], 200);
         } catch (Exception $e) {
             Log::error('Create user failed', [
@@ -163,7 +163,7 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại!',
+                'message' => 'Lỗi hệ thống',
             ], 500);
         }
     }
@@ -184,11 +184,29 @@ class UserController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Xóa tài khoản thành công.'
+                'message' => 'Đã xóa nhân viên'
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Lỗi hệ thống !'
+                'message' => 'Đã xảy ra lỗi!'
+            ], 500);
+        }
+    }
+
+    public function restore($id)
+    {
+        try {
+            $user = User::withTrashed()->findOrFail($id);
+            $user->restore();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã khôi phục nhân viên thành công'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi hệ thống, không thể khôi phục!'
             ], 500);
         }
     }

@@ -35,6 +35,7 @@ Route::middleware('jwt.cookie')->prefix('users')->name('users.')->group(function
 
     Route::post('/create', [UserController::class, 'store'])->name('store');
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
+    Route::post('/{id}/restore', [UserController::class, 'restore'])->name('restore');
 });
 
 Route::middleware('jwt.cookie')->group(function(){
