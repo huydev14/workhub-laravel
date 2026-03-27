@@ -184,7 +184,7 @@
                                 type: 'error',
                                 title: 'Thêm nhân viên thất bại',
                                 description: 'Hãy kiểm tra lại các trường thông tin',
-                                subtitle: xhr.status,
+                                subtitle: 'Mã lỗi: ' + xhr.status,
                                 actionType: 'link',
                                 actionText: 'Undo',
                                 onAction: function() {
@@ -195,8 +195,8 @@
                             fluentToast({
                                 type: 'error',
                                 title: 'Lỗi hệ thống',
-                                description: 'Hãy thử lại sau!',
-                                subtitle: xhr.status,
+                                description: 'Đã có lỗi hệ thống, vui lòng thử lại sau!',
+                                subtitle: 'Mã lỗi: ' + xhr.status,
                                 actionType: 'close',
                             });
                         }
