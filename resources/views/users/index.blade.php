@@ -5,7 +5,7 @@
         <div class="card-header tw-bg-white tw-border-b-0">
 
             {{-- Toolbar --}}
-            <x-toolbar target="slideover-create-user" />
+            <x-toolbar target="slideover-create-user" btnId="btn-open-create" />
 
             <div id="filter-panel" class="tw-hidden tw-pt-5 tw-pb-2">
 
@@ -53,9 +53,14 @@
         </div>
     </div>
 
-    {{-- Create user form --}}
+    {{-- Form: Create user --}}
     <x-slide-over id="slideover-create-user" title="Thêm nhân viên mới">
-        @include('users.create')
+        <div id="content-create"></div>
+    </x-slide-over>
+
+    {{-- Form: Edit user --}}
+    <x-slide-over id="slideover-edit-user" title="Cập nhật thông tin nhân viên">
+        <div id="content-edit"></div>
     </x-slide-over>
 
     <script>
@@ -234,6 +239,25 @@
                 table.ajax.reload();
             });
 
+            // Open create user slide-over
+            $('#btn-open-create').on('click', function() {
+                $.get('{{ route('users.create') }}', function(html) {
+                    $('#content-create').html(html);
+                    openSlideover('slideover-create-user')
+                })
+            });
+
+            $(document).on('click', '.edit-user-btn, #edit-user-btn', function() {
+                let editUrl = $(this).data('edit-url');
+                $.get(editUrl, function(html) {
+                    $('#content-edit').html(html);
+                    openSlideover('slideover-edit-user');
+                }).fail(function(xhr) {
+                    console.error('Load edit form error:', xhr.status);
+                    console.error('Load edit form error:', xhr.responseText);
+                });
+            });
+
             // ---- Delete user ------------------------
             $(document).on('click', '#delete-user-btn', function() {
                 let $btn = $(this);
@@ -281,7 +305,9 @@
                                                 type: 'error',
                                                 title: 'Lỗi khôi phục',
                                                 description: 'Không thể hoàn tác thao tác này.',
-                                                subtitle: 'Mã lỗi: ' + xhr.status,
+                                                subtitle: 'Mã lỗi: ' +
+                                                    xhr
+                                                    .status,
                                             });
                                         }
                                     })

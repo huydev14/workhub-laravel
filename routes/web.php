@@ -32,11 +32,12 @@ Route::middleware('jwt.cookie')->prefix('users')->name('users.')->group(function
     Route::get('/', [UserController::class, 'index'])->name('index');
     Route::get('/data', [UserController::class, 'data'])->name('data');
     Route::get('/filter-data', [UserController::class, 'getFilterData'])->name('filter_data');
+    Route::get('/create', [UserController::class, 'create'])->name('create');
     Route::post('/create', [UserController::class, 'store'])->name('store');
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
     Route::post('/{id}/restore', [UserController::class, 'restore'])->name('restore');
     Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
-    Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::put('/{id}', [UserController::class, 'update'])->name('update');
 });
 
 Route::middleware('jwt.cookie')->group(function () {

@@ -1,5 +1,7 @@
 <div class="" aria-label="User actions">
-    <button type="button" title="Sửa" data-user-id="{{ $user->id }}" class="user-action-btn user-action-btn--edit">
+    <button id="edit-user-btn" type="button" title="Sửa" class="user-action-btn user-action-btn--edit"
+        data-edit-url="{{ route('users.edit', $user->id) }}"
+        data-slideover-target="slideover-edit-user">
         <x-icon-edit />
     </button>
 
