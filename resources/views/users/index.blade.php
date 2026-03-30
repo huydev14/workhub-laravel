@@ -165,6 +165,13 @@
                 },
             });
 
+            const loadingHtml = `
+                <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-h-full tw-min-h-[300px] tw-text-gray-500">
+                    <i class="fas fa-spinner fa-spin tw-text-4xl tw-text-[#0063B1] tw-mb-4"></i>
+                    <p class="tw-text-sm">Đang tải dữ liệu...</p>
+                </div>
+            `;
+
             $('#custom-search-input').on('keyup', function() {
                 table.search(this.value).draw();
             });
@@ -239,20 +246,37 @@
                 table.ajax.reload();
             });
 
-            // Open create user slide-over
-            $('#btn-open-create').on('click', function() {
+            // --- Open create user slide-over -------------------------
+            let preloadedCreateHtml = null;
+            setTimeout(() => {
                 $.get('{{ route('users.create') }}', function(html) {
                     $('#content-create').html(html);
-                    openSlideover('slideover-create-user')
-                })
-            });
+                    preloadedCreateHtml = html;
+                });
+            }, 800);
+
+            $('#btn-open-create').on('click', function() {
+                openSlideover('slideover-create-user')
+                if (preloadedCreateHtml) {
+                    $('#content-create').html(preloadedCreateHtml);
+                } else {
+                    $('#content-create').html(loadingHtml);
+                    preloadedCreateHtml = html;
+                    $('#content-create').html(html);
+                }
+            })
+
 
             $(document).on('click', '.edit-user-btn, #edit-user-btn', function() {
                 let editUrl = $(this).data('edit-url');
+                openSlideover('slideover-edit-user');
+                $('#content-edit').html(loadingHtml);
+
                 $.get(editUrl, function(html) {
                     $('#content-edit').html(html);
-                    openSlideover('slideover-edit-user');
+
                 }).fail(function(xhr) {
+                    $('#content-edit').html('<div class="tw-text-red-500 tw-text-center tw-mt-10">Lỗi tải dữ liệu. Vui lòng thử lại.</div>');
                     console.error('Load edit form error:', xhr.status);
                     console.error('Load edit form error:', xhr.responseText);
                 });
@@ -412,7 +436,7 @@
                                                 'Load error:',
                                                 xhr
                                                 .responseText
-                                                )
+                                            )
                                         }
                                     })
                                 }
