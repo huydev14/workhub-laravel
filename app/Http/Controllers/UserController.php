@@ -176,7 +176,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        $user = User::with('role')->findOrFail($id);
+        $user = User::with('roles')->findOrFail($id);
         return view('users.edit', compact('user'));
     }
 
