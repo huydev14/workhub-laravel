@@ -53,12 +53,12 @@
         </div>
     </div>
 
-    {{-- Form: Create user --}}
+    {{-- Panel: Create user --}}
     <x-slide-over id="slideover-create-user" title="Thêm nhân viên mới">
         <div id="content-create"></div>
     </x-slide-over>
 
-    {{-- Form: Edit user --}}
+    {{-- Panel: Edit user --}}
     <x-slide-over id="slideover-edit-user" title="Cập nhật thông tin nhân viên">
         <div id="content-edit"></div>
     </x-slide-over>
@@ -258,6 +258,102 @@
                 });
             });
 
+            // Create/edit forms
+            $(document).on('submit', '#form-create-user, #form-edit-user', function(e) {
+                e.preventDefault();
+
+                let form = $(this);
+                let url = form.attr('action');
+                let formData = new FormData(this);
+                let submitBtn = form.find('button[type="submit"]');
+                let originalBtnText = submitBtn.html();
+                let isCreate = form.attr('id') === 'form-create-user';
+
+                submitBtn.prop('disabled', true)
+                    .html('<i class="fas fa-spinner fa-spin tw-mr-2"></i> Đang xử lý...');
+
+                form.find('.field-error').remove();
+                form.find('.tw-border-red-500')
+                    .removeClass('tw-border-red-500')
+                    .addClass('tw-border-gray-300');
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(res) {
+                        submitBtn.prop('disabled', false).html(originalBtnText);
+
+                        if (res.success) {
+                            if (isCreate) {
+                                form[0].reset();
+                            }
+
+                            let container = form.closest('.slideover-container');
+                            if (container.length) {
+                                window.closeSlideover(container[0]);
+                            }
+
+                            if (typeof window.table !== 'undefined') {
+                                window.table.ajax.reload(null, false);
+                            }
+
+                            fluentToast({
+                                type: 'success',
+                                title: isCreate ? 'Thêm nhân viên thành công' :
+                                    'Cập nhật nhân viên thành công',
+                                description: isCreate ?
+                                    'Tài khoản đã được cấp quyền truy cập vào hệ thống.' :
+                                    'Thông tin nhân viên đã được cập nhật.',
+                                subtitle: res.msg || '',
+                                actionType: 'close',
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        submitBtn.prop('disabled', false).html(originalBtnText);
+
+                        if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                            $.each(xhr.responseJSON.errors, function(field, messages) {
+                                let input = form.find(`[name="${field}"]`);
+
+                                if (input.length) {
+                                    let wrapper = input.closest('.tw-flex-col');
+
+                                    input.closest('.tw-relative')
+                                        .removeClass('tw-border-gray-300')
+                                        .addClass('tw-border-red-500');
+
+                                    wrapper.append(`
+                                        <span class="field-error tw-block tw-text-red-500 tw-text-xs tw-mt-1 tw-font-medium">
+                                            ${messages[0]}
+                                        </span>`);
+                                }
+                            });
+
+                            fluentToast({
+                                type: 'error',
+                                title: isCreate ? 'Thêm nhân viên thất bại' :
+                                    'Cập nhật nhân viên thất bại',
+                                description: 'Hãy kiểm tra lại các trường thông tin',
+                                subtitle: 'Mã lỗi: ' + xhr.status,
+                                actionType: 'close',
+                            });
+                        } else {
+                            fluentToast({
+                                type: 'error',
+                                title: 'Lỗi hệ thống',
+                                description: 'Đã có lỗi hệ thống, vui lòng thử lại sau!',
+                                subtitle: 'Mã lỗi: ' + xhr.status,
+                                actionType: 'close',
+                            });
+                        }
+                    }
+                });
+            });
+
             // ---- Delete user ------------------------
             $(document).on('click', '#delete-user-btn', function() {
                 let $btn = $(this);
@@ -309,6 +405,14 @@
                                                     xhr
                                                     .status,
                                             });
+                                            console.error(
+                                                'Load error:',
+                                                xhr.status)
+                                            console.error(
+                                                'Load error:',
+                                                xhr
+                                                .responseText
+                                                )
                                         }
                                     })
                                 }
