@@ -55,12 +55,12 @@
 
     {{-- Panel: Create user --}}
     <x-slide-over id="slideover-create-user" title="Thêm nhân viên mới">
-        <div id="content-create"></div>
+        <div id="content-create" class="tw-flex tw-flex-col tw-flex-1 tw-min-h-0"></div>
     </x-slide-over>
 
     {{-- Panel: Edit user --}}
     <x-slide-over id="slideover-edit-user" title="Cập nhật thông tin nhân viên">
-        <div id="content-edit"></div>
+        <div id="content-edit" class="tw-flex tw-flex-col tw-flex-1 tw-min-h-0"></div>
     </x-slide-over>
 
     <script>
