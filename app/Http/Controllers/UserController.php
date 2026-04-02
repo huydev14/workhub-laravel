@@ -233,8 +233,12 @@ class UserController extends Controller
                 })
                 ->editColumn('status', function ($user) {
                     return $user->status === 0
-                        ? '<span class="badge badge-success">Đang làm việc</span>'
-                        : '<span class="badge badge-secondary">Đã nghỉ việc</span>';
+                        ? '<span class="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-800">
+                            Active
+                        </span>'
+                        : '<span class="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-800">
+                            Leave
+                        </span>';
                 })
                 ->editColumn('employment_type', function ($user) {
                     return $user->employment_type === 0 ? 'Full-time' : 'Part-time';

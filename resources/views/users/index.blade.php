@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-    <div class="fluent-card">
+    <div class="fluent-card ">
         <div class="card-header tw-bg-white tw-border-b-0">
 
             {{-- Toolbar --}}
@@ -44,7 +44,9 @@
                         <th>Trạng thái</th>
                         <th>Số điện thoại</th>
                         <th>Loại tài khoản</th>
-                        <th>Tác vụ</th>
+                        <th>
+                            <div class="tw-text-center">Tác vụ</div>
+                        </th>
                     </tr>
                 </thead>
             </table>
@@ -151,9 +153,18 @@
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        className: 'tw-text-center',
                     }
                 ],
+
+                createdRow: function(row, data) {
+                    let url = '{{ route('users.show', ':id') }}'.replace(':id', data.id);
+
+                    $(row).css('cursor', 'pointer').on('click', function() {
+                        window.location.href = url;
+                    })
+                },
 
                 layout: {
                     topStart: null,
@@ -275,7 +286,7 @@
                 }).fail(function(xhr) {
                     $('#content-edit').html(
                         '<div class="tw-text-red-500 tw-text-center tw-mt-10">Lỗi tải dữ liệu. Vui lòng thử lại.</div>'
-                        );
+                    );
                     console.error('Load edit form error:', xhr.status);
                     console.error('Load edit form error:', xhr.responseText);
                 });

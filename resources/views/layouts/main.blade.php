@@ -41,15 +41,11 @@
 
         <main class="content">
             <div class="content-header">
-                <div class="container-fluid">
-                    @yield('page-header')
-                </div>
+                @yield('page-header')
             </div>
 
             <div class="content-body">
-                <div class="container-fluid">
-                    @yield('content')
-                </div>
+                @yield('content')
             </div>
         </main>
 
