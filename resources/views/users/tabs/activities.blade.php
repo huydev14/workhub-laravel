@@ -48,8 +48,10 @@
                         {{ $log->created_at->format('H:i - d/m/Y') }}
 
                         @if ($log->causer)
-                            <span class="tw-mx-1">•</span> Thực hiện bởi <span
-                                class="tw-font-medium tw-text-gray-700">{{ $log->causer->name }}</span>
+                            <span class="tw-mx-1">•</span> Thực hiện bởi
+                            <span class="tw-font-medium tw-text-p tw-font-bold">
+                                <a href="{{ route('users.show', $log->causer_id) }}">{{ $log->causer->name }}</a>
+                            </span>
                         @endif
                     </time>
 

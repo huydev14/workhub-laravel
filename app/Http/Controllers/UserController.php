@@ -21,14 +21,16 @@ class UserController extends Controller
         return view('users.index');
     }
 
-    public function show($id){
-        $user = User::with(['roles','department', 'position', 'team'])->findOrFail($id);
+    public function show($id)
+    {
+        $user = User::with(['roles', 'department', 'position', 'team'])->findOrFail($id);
 
         $activities = $user->activities()->latest()->get();
         return view('users.show', compact('user', 'activities'));
     }
 
-    public function create(){
+    public function create()
+    {
         $user = new User();
         return view('users.create', compact('user'));
     }
@@ -255,10 +257,10 @@ class UserController extends Controller
                 })
                 ->editColumn('status', function ($user) {
                     return $user->status === 0
-                        ? '<span class="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-800">
+                        ? '<span class="tw-inline-flex tw-items-center tw-px-2 tw-rounded-xs tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-800">
                             Active
                         </span>'
-                        : '<span class="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-800">
+                        : '<span class="tw-inline-flex tw-items-center tw-px-2 tw-rounded-xs tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-800">
                             Leave
                         </span>';
                 })
@@ -266,12 +268,12 @@ class UserController extends Controller
                     return $user->employment_type === 0 ? 'Full-time' : 'Part-time';
                 })
                 ->addColumn('role', function ($user) {
-                    return $user->roles->first()?->name;
+                    return $user->roles->first()->name ?? '<div class="tw-text-gray-400 tw-text-xs">---</div>';
                 })
                 ->addColumn('action', function ($user) {
-                    return view('partials.action', compact('user'))->render();
+                    return view('users._users-action', compact('user'))->render();
                 })
-                ->rawColumns(['gender', 'status', 'action'])
+                ->rawColumns(['gender', 'status', 'role', 'action'])
                 ->make(true);
         }
     }

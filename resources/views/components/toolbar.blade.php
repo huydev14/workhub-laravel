@@ -12,7 +12,7 @@
 
     <button id="toggle-filter-btn" class="tw-text-gray-500 hover:tw-text-[#0f6cbd] tw-px-1 tw-transition-colors"
         title="Filter">
-        <x-icon-filter />
+        <i class="fas fa-filter tw-text-gray-500"></i>
     </button>
 
     <div class="tw-h-6 tw-w-px tw-bg-gray-300"></div>
@@ -29,5 +29,7 @@
         </button>
     </div>
 
-    <x-create-button :btnId="$btnId" :target="$target" />
+    @if ($target)
+        <x-create-button :btnId="$btnId" :target="$target" />
+    @endif
 </div>

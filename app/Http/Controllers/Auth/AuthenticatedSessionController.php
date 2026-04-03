@@ -33,6 +33,7 @@ class AuthenticatedSessionController extends Controller
         activity('auth')
             ->performedOn($user)
             ->causedBy($user)
+            ->withProperties(['ip' => request()->ip()])
             ->log('Đã đăng nhập vào hệ thống');
 
         $accessToken  = $this->jwtService->generateAccessToken($user);
@@ -71,6 +72,7 @@ class AuthenticatedSessionController extends Controller
                 activity('auth')
                     ->performedOn($user)
                     ->causedBy($user)
+                    ->withProperties(['ip' => request()->ip()])
                     ->log('Đã đăng xuất khỏi hệ thống');
             }
         } catch (Exception $e) {

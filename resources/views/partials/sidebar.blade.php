@@ -116,8 +116,8 @@
             </ul>
         </li>
 
-        {{-- Cấu hình --}}
-        <li class="nav-item">
+        {{-- System configuration --}}
+        <li class="nav-item menu-open {{ request()->routeIs('users.*') ? 'menu-is-opening ' : '' }}"">
             <a href="#" class="nav-link">
                 <x-icon-setting class="nav-icon" />
                 <p>Cấu hình
@@ -126,15 +126,15 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="pages/tables/simple.html" class="nav-link">
-                        <p>Cơ chế lương</p>
+                    <a href="{{ route('audit-logs.index')}}" class="nav-link {{ request()->routeIs('audit-logs.index') ? 'active' : '' }}">
+                        <p>Audit logs</p>
                     </a>
                 </li>
             </ul>
         </li>
 
         {{-- Tài khoản --}}
-        <li class="nav-item {{ request()->routeIs('users.*') ? 'menu-is-opening menu-open' : '' }}">
+        <li class="nav-item menu-open {{ request()->routeIs('users.*') ? 'menu-is-opening ' : '' }}">
             <a href="#" class="nav-link">
                 <x-icon-people-setting class="nav-icon" />
                 <p>Tài khoản
@@ -145,14 +145,7 @@
                 <li class="nav-item ">
                     <a href="{{ route('users.index') }}"
                         class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}">
-                        <p>Danh sách nhân sự</p>
-                    </a>
-                </li>
-            </ul>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="pages/tables/simple.html" class="nav-link">
-                        <p>Hệ thống tài khoản</p>
+                        <p>Quản lý tài khoản</p>
                     </a>
                 </li>
             </ul>

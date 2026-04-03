@@ -31,7 +31,6 @@
             </div>
         </div>
 
-        {{-- Users datatable --}}
         <div class="card-body tw-pt-0">
             <table id="users-table" class="display table table-hover text-nowrap" style="width: 100%;">
                 <thead>
@@ -66,7 +65,7 @@
     <script>
         $(function() {
             // ---- RENDER TABLE --------------------------
-            window.table = new DataTable('#users-table', {
+            window.usersTable = new DataTable('#users-table', {
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -97,24 +96,6 @@
                     {
                         data: 'department.name',
                         name: 'department.name',
-                        render: function(data, type, row) {
-                            if (type === 'display') {
-                                let positionName = (row.position && row.position.name) ?
-                                    row.position.name :
-                                    'Chưa cập nhật';
-                                let departmentName = (row.department && row.department.name) ?
-                                    row.department.name :
-                                    'Chưa phân bổ';
-
-                                return `
-                                    <div style="line-height: 1.4;">
-                                        <div class="tw-font-medium tw-text-gray-900">${departmentName}</div>
-                                        <div class="tw-text-xs tw-text-gray-500">Chức vụ: ${positionName}</div>
-                                    </div>
-                                `;
-                            }
-                            return data || '-';
-                        }
                     },
                     {
                         data: 'employment_type',
@@ -132,22 +113,6 @@
                     {
                         data: 'role',
                         name: 'role',
-                        defaultContent: '-',
-                        render: function(data, type, row) {
-                            if (type === 'display') {
-                                if (!data) {
-                                    return null;
-                                }
-                                let badgeClass = 'tw-bg-gray-100 tw-text-gray-700';
-                                if (data === 'Super Admin') badgeClass =
-                                    'tw-bg-purple-100 tw-text-purple-700';
-                                else if (data === 'Admin' || data === 'Manager') badgeClass =
-                                    'tw-bg-blue-100 tw-text-[#0f6cbd]';
-
-                                return `<span class="tw-inline-flex tw-items-center tw-px-2.5 tw-py-0.5 tw-rounded-md tw-text-xs tw-font-medium ${badgeClass}">${data}</span>`;
-                            }
-                            return data;
-                        }
                     },
                     {
                         data: 'action',
@@ -182,7 +147,7 @@
             `;
 
             $('#custom-search-input').on('keyup', function() {
-                table.search(this.value).draw();
+                usersTable.search(this.value).draw();
             });
 
             // ---- FILTER PANEL TOGGLE ---------------------------
@@ -193,7 +158,7 @@
                 // Reset filter
                 $('#f_status, #f_department, #f_employment_type, #f_role').val('').trigger(
                     'change.select2');
-                table.ajax.reload();
+                usersTable.ajax.reload();
             });
 
             // ---- RENDER OPTIONS FOR SELECT FIELDs ----------------
@@ -245,14 +210,14 @@
                 });
 
             $(document).on('change', '#filter-panel select', function() {
-                table.ajax.reload();
+                usersTable.ajax.reload();
             });
 
             // Clear filter
             $(document).on('click', '#btn-clear-filters', function() {
                 $('#f_status, #f_department, #f_employment_type, #f_role').val('').trigger(
                     'change.select2');
-                table.ajax.reload();
+                usersTable.ajax.reload();
             });
 
             // --- Open create user slide-over -------------------------
@@ -330,8 +295,8 @@
                                 window.closeSlideover(container[0]);
                             }
 
-                            if (typeof window.table !== 'undefined') {
-                                window.table.ajax.reload(null, false);
+                            if (typeof window.usersTable !== 'undefined') {
+                                window.usersTable.ajax.reload(null, false);
                             }
 
                             fluentToast({
@@ -403,7 +368,7 @@
                     type: 'DELETE',
                     url: deleteUrl,
                     success: function(res) {
-                        table.ajax.reload(null, false);
+                        usersTable.ajax.reload(null, false);
                         fluentToast({
                             type: 'info',
                             title: 'Đã xóa nhân viên',
@@ -419,8 +384,10 @@
                                         type: 'POST',
                                         url: restoreUrl,
                                         success: function(res) {
-                                            table.ajax.reload(
-                                                null, false);
+                                            usersTable.ajax
+                                                .reload(
+                                                    null, false
+                                                    );
 
                                             fluentToast({
                                                 type: 'success',
