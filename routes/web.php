@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuditLogController;
 
 require __DIR__ . '/auth.php';
 
@@ -39,4 +40,11 @@ Route::middleware('jwt.cookie')->group(function () {
 
     // ---- Role ---------------------------------------
     Route::resource('/roles', RoleController::class)->except(['show']);
+
+    // ---- Audit logs ---------------------------------------
+    Route::prefix('audit-logs')->name('audit-logs.')->group(function(){
+        Route::get('/data', [AuditLogController::class, 'data'])->name('data');
+        Route::post('/{id}/restore', [AuditLogController::class, 'restore'])->name('restore');
+    });
+    Route::resource('/audit-logs', AuditLogController::class)->except(['show']);
 });
