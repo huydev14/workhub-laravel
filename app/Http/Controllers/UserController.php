@@ -23,7 +23,9 @@ class UserController extends Controller
 
     public function show($id){
         $user = User::with(['roles','department', 'position', 'team'])->findOrFail($id);
-        return view('users.show', compact('user'));
+
+        $activities = $user->activities()->latest()->get();
+        return view('users.show', compact('user', 'activities'));
     }
 
     public function create(){
@@ -77,6 +79,11 @@ class UserController extends Controller
                 $role = Role::findById($roleId);
                 $user->assignRole($role);
             }
+
+            activity('created')
+                ->performedOn($user)
+                ->causedBy($user)
+                ->log('Đã tạo người dùng mới thành công');
 
             return response()->json([
                 'success' => true,
@@ -140,6 +147,11 @@ class UserController extends Controller
             }
             $user->update($data);
 
+            activity('updated')
+                ->performedOn($user)
+                ->causedBy($user)
+                ->log('Đã cập nhật người dùng thành công');
+
             return response()->json([
                 'success' => true,
                 'msg' => 'Cập nhật thành công'
@@ -170,6 +182,11 @@ class UserController extends Controller
 
             $user->delete();
 
+            activity('deleted')
+                ->performedOn($user)
+                ->causedBy($user)
+                ->log('Đã xóa người dùng thành công');
+
             return response()->json([
                 'success' => true,
                 'msg' => 'Đã xóa nhân viên'
@@ -186,6 +203,11 @@ class UserController extends Controller
         try {
             $user = User::withTrashed()->findOrFail($id);
             $user->restore();
+
+            activity('restore')
+                ->performedOn($user)
+                ->causedBy($user)
+                ->log('Đã khôi phục người dùng thành công');
 
             return response()->json([
                 'success' => true,

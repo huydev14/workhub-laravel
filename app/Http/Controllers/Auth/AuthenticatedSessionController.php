@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use App\Services\JwtService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,11 @@ class AuthenticatedSessionController extends Controller
     {
         $user = $request->authenticate();
 
+        activity('auth')
+            ->performedOn($user)
+            ->causedBy($user)
+            ->log('Đã đăng nhập vào hệ thống');
+
         $accessToken  = $this->jwtService->generateAccessToken($user);
         $refreshToken = $this->jwtService->generateRefreshToken($user);
 
@@ -50,18 +56,24 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         try {
-            $user = Auth::user();
             $accessToken = $request->cookie('access_token');
+            $user = Auth::user();
 
             if ($accessToken) {
                 JWTAuth::setToken($accessToken)->invalidate();
             }
 
-            // Remove refresh token to DB
-            $user->refresh_token = null;
-            $user->save();
+            if ($user) {
+                // Remove refresh token to DB
+                $user->refresh_token = null;
+                $user->save();
 
-        } catch (\Exception $e) {
+                activity('auth')
+                    ->performedOn($user)
+                    ->causedBy($user)
+                    ->log('Đã đăng xuất khỏi hệ thống');
+            }
+        } catch (Exception $e) {
             Log::error("Logout error: " . $e->getMessage());
         }
 

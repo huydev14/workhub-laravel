@@ -142,9 +142,7 @@
                             @include('users.tabs.overview')
                             @include('users.tabs.work')
                             @include('users.tabs.timeline')
-                            <div id="tab-activity" class="tab-pane tw-hidden">
-                                {{-- TODO: Add user audit logs --}}
-                            </div>
+                            @include('users.tabs.activities')
                             @include('users.tabs.document')
                         </div>
                     </div>
