@@ -118,30 +118,22 @@
                         {{-- Tab Navigation --}}
                         <div class="tw-border-b tw-border-gray-200 tw-px-6">
                             <nav class="tw--mb-px tw-flex tw-space-x-8" aria-label="Tabs">
-                                <button
-                                    class="fluent-tab tw-border-[#0063B1] tw-text-[#0063B1] tw-whitespace-nowrap tw-py-4 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors"
-                                    data-target="#tab-overview">Tổng quan
-                                </button>
-                                <button
-                                    class="fluent-tab tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300 tw-whitespace-nowrap tw-py-4 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors"
-                                    data-target="#tab-work">
-                                    Công tác
-                                </button>
-                                <button
-                                    class="fluent-tab tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300 tw-whitespace-nowrap tw-py-4 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors"
-                                    data-target="#tab-timeline">
-                                    Lộ trình
-                                </button>
-                                <button
-                                    class="fluent-tab tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300 tw-whitespace-nowrap tw-py-4 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors"
-                                    data-target="#tab-activity">
-                                    Activity Logs
-                                </button>
-                                <button
-                                    class="fluent-tab tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300 tw-whitespace-nowrap tw-py-4 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors"
-                                    data-target="#tab-documents">
-                                    Tài liệu & Hợp đồng
-                                </button>
+                                @php
+                                    $tabs = [
+                                        'tab-overview' => 'Tổng quan',
+                                        'tab-work' => 'Công tác',
+                                        'tab-timeline' => 'Lộ trình',
+                                        'tab-activity' => 'Activity Logs',
+                                        'tab-documents' => 'Tài liệu & Hợp đồng',
+                                    ];
+                                @endphp
+                                @foreach ($tabs as $id => $title)
+                                    <button
+                                        class="fluent-tab tw-whitespace-nowrap tw-py-4 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors hover:tw-border-gray-300 hover:tw-text-gray-700
+                                        {{ $loop->first ? 'tw-border-[#0063B1] tw-text-[#0063B1]' : 'tw-border-transparent tw-text-gray-500 ' }}"
+                                        data-target="#{{ $id }}">{{ $title }}
+                                    </button>
+                                @endforeach
                             </nav>
                         </div>
 

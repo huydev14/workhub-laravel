@@ -109,7 +109,7 @@
             </h3>
             <button type="button"
                 class="tw-text-sm tw-text-[#0063B1] hover:tw-text-blue-800 hover:tw-underline tw-font-medium tw-transition-colors">
-                Xem chi tiết
+                Xem danh sách thiết bị
             </button>
         </div>
 
@@ -117,23 +117,19 @@
             <table class="tw-w-full tw-text-sm tw-text-left">
                 <thead class="tw-bg-white tw-border-b tw-border-gray-200">
                     <tr>
-                        <th class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500">Thiết
-                            bị</th>
-                        <th class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500">Mã tài
-                            sản</th>
-                        <th class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500">Ngày
-                            nhận</th>
-                        <th class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500 tw-text-right">
-                            Trạng thái</th>
+                        <th class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500">Thiết bị</th>
+                        <th class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500">Mã tài sản</th>
+                        <th class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500">Ngày nhận</th>
+                        <th class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500 tw-text-right"> Trạng thái</th>
                     </tr>
                 </thead>
                 <tbody class="tw-divide-y tw-divide-gray-100">
 
                     {{-- Row 1 --}}
                     <tr class="hover:tw-bg-gray-50 tw-transition-colors">
-                        <td class="tw-px-5 tw-py-4 tw-flex tw-items-center tw-gap-3">
+                        <td class="tw-px-5 tw-py-4 tw-flex tw-items-center tw-gap-1">
                             <div
-                                class="tw-w-9 tw-h-9 tw-rounded-md tw-bg-gray-50 tw-border tw-border-gray-100 tw-flex tw-items-center tw-justify-center tw-text-gray-500">
+                                class="tw-w-9 tw-h-9 tw-rounded-md tw-flex tw-items-center tw-justify-center tw-text-gray-500">
                                 <i class="fas fa-laptop"></i>
                             </div>
                             <div class="tw-font-medium tw-text-gray-900">MacBook Pro M2 14"
@@ -143,7 +139,7 @@
                         <td class="tw-px-5 tw-py-4 tw-text-gray-600">15/01/2026</td>
                         <td class="tw-px-5 tw-py-4 tw-text-right">
                             <span
-                                class="tw-inline-flex tw-items-center tw-px-2.5 tw-py-1 tw-rounded-md tw-text-xs tw-font-medium tw-bg-green-50 tw-text-green-700 tw-border tw-border-green-200">
+                                class="tw-inline-flex tw-items-center tw-px-2.5 tw-py-1 tw-rounded-sm tw-text-xs tw-font-medium tw-bg-green-50 tw-text-green-700 tw-border tw-border-green-200">
                                 Đang sử dụng
                             </span>
                         </td>
@@ -151,9 +147,9 @@
 
                     {{-- Row 2 --}}
                     <tr class="hover:tw-bg-gray-50 tw-transition-colors">
-                        <td class="tw-px-5 tw-py-4 tw-flex tw-items-center tw-gap-3">
+                        <td class="tw-px-5 tw-py-4 tw-flex tw-items-center tw-gap-1">
                             <div
-                                class="tw-w-9 tw-h-9 tw-rounded-md tw-bg-gray-50 tw-border tw-border-gray-100 tw-flex tw-items-center tw-justify-center tw-text-gray-500">
+                                class="tw-w-9 tw-h-9 tw-rounded-sm tw-flex tw-items-center tw-justify-center tw-text-gray-500">
                                 <i class="fas fa-desktop"></i>
                             </div>
                             <div class="tw-font-medium tw-text-gray-900">Màn hình Dell
@@ -163,7 +159,7 @@
                         <td class="tw-px-5 tw-py-4 tw-text-gray-600">15/01/2026</td>
                         <td class="tw-px-5 tw-py-4 tw-text-right">
                             <span
-                                class="tw-inline-flex tw-items-center tw-px-2.5 tw-py-1 tw-rounded-md tw-text-xs tw-font-medium tw-bg-green-50 tw-text-green-700 tw-border tw-border-green-200">
+                                class="tw-inline-flex tw-items-center tw-px-2.5 tw-py-1 tw-rounded-sm tw-text-xs tw-font-medium tw-bg-green-50 tw-text-green-700 tw-border tw-border-green-200">
                                 Đang sử dụng
                             </span>
                         </td>
