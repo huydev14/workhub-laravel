@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\Department;
 use App\Models\Team;
+use App\Services\AuditLogService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +19,7 @@ class UserController extends Controller
 {
     public function index()
     {
+        AuditLogService::log('Xem danh sách tài khoản', 'users.index', Auth::user());
         return view('users.index');
     }
 
@@ -26,6 +28,8 @@ class UserController extends Controller
         $user = User::with(['roles', 'department', 'position', 'team'])->findOrFail($id);
 
         $activities = $user->activities()->latest()->get();
+
+        AuditLogService::log('Xem profile người dùng', 'users.show', Auth::user(), $user);
         return view('users.show', compact('user', 'activities'));
     }
 
@@ -82,10 +86,7 @@ class UserController extends Controller
                 $user->assignRole($role);
             }
 
-            activity('created')
-                ->performedOn($user)
-                ->causedBy($user)
-                ->log('Đã tạo người dùng mới thành công');
+            AuditLogService::log('Đã tạo người dùng mới thành công', 'users.create', Auth::user(), $user);
 
             return response()->json([
                 'success' => true,
@@ -149,15 +150,13 @@ class UserController extends Controller
             }
             $user->update($data);
 
-            activity('updated')
-                ->performedOn($user)
-                ->causedBy($user)
-                ->log('Đã cập nhật người dùng thành công');
+            AuditLogService::log('Cập nhật người dùng thành công', 'users.update', Auth::user(), $user);
 
             return response()->json([
                 'success' => true,
                 'msg' => 'Cập nhật thành công'
             ], 200);
+
         } catch (Exception $e) {
             Log::error('Update user failed', [
                 'error' => $e->getMessage(),
@@ -175,7 +174,7 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
 
-            // Prevent delete myself
+            // Prevent delete self
             if (Auth::id() === $user->id) {
                 return response()->json([
                     'msg' => 'Không thể tự xóa tài khoản của chính mình!'
@@ -184,10 +183,7 @@ class UserController extends Controller
 
             $user->delete();
 
-            activity('deleted')
-                ->performedOn($user)
-                ->causedBy($user)
-                ->log('Đã xóa người dùng thành công');
+            AuditLogService::log('Xóa người dùng thành công', 'user', Auth::user(), $user);
 
             return response()->json([
                 'success' => true,
@@ -206,10 +202,7 @@ class UserController extends Controller
             $user = User::withTrashed()->findOrFail($id);
             $user->restore();
 
-            activity('restore')
-                ->performedOn($user)
-                ->causedBy($user)
-                ->log('Đã khôi phục người dùng thành công');
+            AuditLogService::log('Đã khôi phục người dùng thành công', 'users.restore', Auth::user(), $user);
 
             return response()->json([
                 'success' => true,

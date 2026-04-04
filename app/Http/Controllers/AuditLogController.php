@@ -34,8 +34,8 @@ class AuditLogController extends Controller
                             ' . $modelName . ' #' . $log->subject_id . '
                             </span>';
                 })
-                ->editColumn('ip_address', function ($log) {
-                    return $log->getExtraProperty('ip');
+                ->editColumn('session_id', function ($log) {
+                    return $log->getExtraProperty('session_id');
                 })
                 ->addColumn('details', function ($log) {
                     if (!empty($log->properties->all())) {

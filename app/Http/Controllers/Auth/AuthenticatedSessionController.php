@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
+use App\Services\AuditLogService;
 use App\Services\JwtService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -30,11 +31,7 @@ class AuthenticatedSessionController extends Controller
     {
         $user = $request->authenticate();
 
-        activity('auth')
-            ->performedOn($user)
-            ->causedBy($user)
-            ->withProperties(['ip' => request()->ip()])
-            ->log('Đã đăng nhập vào hệ thống');
+        AuditLogService::log('Đã đăng nhập vào hệ thống', 'auth', $user, $user);
 
         $accessToken  = $this->jwtService->generateAccessToken($user);
         $refreshToken = $this->jwtService->generateRefreshToken($user);
@@ -69,11 +66,8 @@ class AuthenticatedSessionController extends Controller
                 $user->refresh_token = null;
                 $user->save();
 
-                activity('auth')
-                    ->performedOn($user)
-                    ->causedBy($user)
-                    ->withProperties(['ip' => request()->ip()])
-                    ->log('Đã đăng xuất khỏi hệ thống');
+                AuditLogService::log('Đã đăng xuất khỏi hệ thống', 'auth', $user, $user);
+
             }
         } catch (Exception $e) {
             Log::error("Logout error: " . $e->getMessage());

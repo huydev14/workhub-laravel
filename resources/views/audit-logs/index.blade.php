@@ -36,7 +36,7 @@
                         <th>Actor / Causer</th>
                         <th>Action / Event</th>
                         <th>Target</th>
-                        <th>IP Address</th>
+                        <th>Session ID</th>
                         <th>Details</th>
                     </tr>
                 </thead>
@@ -51,14 +51,11 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                order: [
-                    [1, 'desc']
-                ],
                 ajax: {
                     url: '{!! route('audit-logs.data') !!}',
                 },
-                columns: [
-                    {
+                order: [],
+                columns: [{
                         data: 'created_at',
                         name: 'created_at',
                     },
@@ -79,12 +76,15 @@
                         name: 'subject_id',
                     },
                     {
-                        data: 'ip_address',
-                        name: 'ip_address',
+                        data: 'session_id',
+                        name: 'session_id',
+                        orderable: false,
                     },
                     {
                         data: 'details',
                         name: 'details',
+                        orderable: false,
+                        searchable: false,
                     },
                 ],
                 layout: {
@@ -273,5 +273,3 @@
         });
     </script>
 @endsection
-
-
