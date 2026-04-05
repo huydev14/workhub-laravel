@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -26,10 +28,10 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::with(['roles', 'department', 'position', 'team'])->findOrFail($id);
-
         $activities = $user->activities()->latest()->get();
 
         AuditLogService::log('Xem profile người dùng', 'users.show', Auth::user(), $user);
+
         return view('users.show', compact('user', 'activities'));
     }
 
@@ -39,38 +41,9 @@ class UserController extends Controller
         return view('users.create', compact('user'));
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $data = $request->validate(
-            [
-                'name'     => 'required|string|max:255',
-                'email'    => 'required|email|unique:users,email',
-                'password' => 'required|min:6',
-                'phone'    => 'nullable|string|max:20',
-                'birthday' => 'nullable|date',
-                'address'  => 'nullable|string|max:255',
-                'gender'   => 'required|in:0,1',
-                'department_id' => 'required|exists:departments,id',
-                'team_id' => 'nullable|exists:teams,id',
-                'role_id' => 'nullable|exists:roles,id',
-                'start_date' => 'nullable|date',
-                'employment_type' => 'required|in:0,1',
-            ],
-            [
-                'name.required'  => 'Vui lòng nhập họ và tên.',
-                'email.required' => 'Vui lòng nhập địa chỉ email.',
-                'email.email'    => 'Định dạng email không hợp lệ.',
-                'email.unique'   => 'Email này đã tồn tại trong hệ thống.',
-                'password.required' => 'Vui lòng tạo mật khẩu đăng nhập.',
-                'password.min'    => 'Mật khẩu phải có ít nhất 6 ký tự.',
-                'gender.required' => 'Vui lòng chọn giới tính.',
-                'department_id.required' => 'Vui lòng chọn phòng ban.',
-                'department_id.exists' => 'Phòng ban không hợp lệ.',
-                'team_id.exists' => 'Đội nhóm không hợp lệ.',
-                'role_id.exists' => 'Loại tài khoản không hợp lệ.',
-                'employment_type.required' => 'Vui lòng chọn hình thức làm việc.',
-            ]
-        );
+        $data = $request->validated();
 
         try {
             $data['password'] = Hash::make($data['password']);
@@ -88,20 +61,10 @@ class UserController extends Controller
 
             AuditLogService::log('Đã tạo người dùng mới thành công', 'users.create', Auth::user(), $user);
 
-            return response()->json([
-                'success' => true,
-                'msg' => 'Thêm nhân viên thành công',
-            ], 200);
+            return response()->json(['success' => true, 'msg' => 'Thêm nhân viên thành công'], 200);
         } catch (Exception $e) {
-            Log::error('Create user failed', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            return response()->json([
-                'status' => 'error',
-                'msg' => 'Lỗi hệ thống',
-            ], 500);
+            Log::error('Create user failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return response()->json(['status' => 'error', 'msg' => 'Lỗi hệ thống'], 500);
         }
     }
 
@@ -111,36 +74,10 @@ class UserController extends Controller
         return view('users.edit', compact('user'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
         $user = User::findOrFail($id);
-        $request->validate(
-            [
-                'name'     => 'required|string|max:255',
-                'email'    => ['required', 'email', Rule::unique('users')->ignore($id)],
-                'phone'    => 'nullable|string|max:20',
-                'birthday' => 'nullable|date',
-                'address'  => 'nullable|string|max:255',
-                'gender'   => 'required|in:0,1',
-                'department_id' => 'required|exists:departments,id',
-                'team_id' => 'nullable|exists:teams,id',
-                'role_id' => 'nullable|exists:roles,id',
-                'start_date' => 'nullable|date',
-                'employment_type' => 'required|in:0,1',
-            ],
-            [
-                'name.required'  => 'Vui lòng nhập họ và tên.',
-                'email.required' => 'Vui lòng nhập địa chỉ email.',
-                'email.email'    => 'Định dạng email không hợp lệ.',
-                'email.unique'   => 'Email này đã tồn tại trong hệ thống.',
-                'gender.required' => 'Vui lòng chọn giới tính.',
-                'department_id.required' => 'Vui lòng chọn phòng ban.',
-                'department_id.exists' => 'Phòng ban không hợp lệ.',
-                'team_id.exists' => 'Đội nhóm không hợp lệ.',
-                'role_id.exists' => 'Loại tài khoản không hợp lệ.',
-                'employment_type.required' => 'Vui lòng chọn hình thức làm việc.',
-            ]
-        );
+        $request->validated();
 
         try {
             $data = $request->except('password');
@@ -156,16 +93,9 @@ class UserController extends Controller
                 'success' => true,
                 'msg' => 'Cập nhật thành công'
             ], 200);
-
         } catch (Exception $e) {
-            Log::error('Update user failed', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-            return response()->json([
-                'success' => false,
-                'msg' => 'Lỗi hệ thống'
-            ], 500);
+            Log::error('Update user failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString(),]);
+            return response()->json(['success' => false, 'msg' => 'Lỗi hệ thống'], 500);
         }
     }
 
@@ -174,25 +104,16 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
 
-            // Prevent delete self
             if (Auth::id() === $user->id) {
-                return response()->json([
-                    'msg' => 'Không thể tự xóa tài khoản của chính mình!'
-                ], 403);
+                return response()->json(['msg' => 'Không thể tự xóa tài khoản của chính mình!'], 403);
             }
-
             $user->delete();
 
             AuditLogService::log('Xóa người dùng thành công', 'user', Auth::user(), $user);
-
-            return response()->json([
-                'success' => true,
-                'msg' => 'Đã xóa nhân viên'
-            ]);
+            return response()->json(['success' => true, 'msg' => 'Đã xóa nhân viên']);
         } catch (Exception $e) {
-            return response()->json([
-                'msg' => 'Đã xảy ra lỗi!'
-            ], 500);
+            Log::error('Remove user failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString(),]);
+            return response()->json(['msg' => 'Đã xảy ra lỗi!'], 500);
         }
     }
 
@@ -204,15 +125,10 @@ class UserController extends Controller
 
             AuditLogService::log('Đã khôi phục người dùng thành công', 'users.restore', Auth::user(), $user);
 
-            return response()->json([
-                'success' => true,
-                'msg' => 'Đã khôi phục nhân viên thành công'
-            ]);
+            return response()->json(['success' => true, 'msg' => 'Đã khôi phục nhân viên thành công']);
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'msg' => 'Lỗi hệ thống, không thể khôi phục!'
-            ], 500);
+            Log::error('Restore user failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString(),]);
+            return response()->json(['success' => false, 'msg' => 'Lỗi hệ thống, không thể khôi phục!'], 500);
         }
     }
 
