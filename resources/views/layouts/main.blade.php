@@ -60,6 +60,8 @@
         <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
         <script src="{{ asset('adminlte/plugins/chart.js/Chart.min.js') }}"></script>
         <script src="{{ asset('adminlte/dist/js/pages/dashboard3.js') }}"></script>
+
+        <script src="{{ asset('js/helpers.js') }}"></script>
         <script src="{{ asset('js/toast.js') }}"></script>
         @stack('scripts')
 </body>

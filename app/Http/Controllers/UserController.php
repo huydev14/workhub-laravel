@@ -17,7 +17,7 @@ use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Services\AuditLogService;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -26,18 +26,28 @@ class UserController extends Controller
         return view('users.index');
     }
 
-    public function show($id)
+    public function show(User $user)
     {
-        $user = User::with(['roles', 'department', 'position', 'team'])->findOrFail($id);
+        $user->load('roles', 'department', 'position', 'team');
         $activities = $user->activities()->latest()->get();
 
         return view('users.show', compact('user', 'activities'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $user = new User();
-        return view('users.create', compact('user'));
+        $status = collect([
+            ['id'  => 1, 'text' => 'Đã nghỉ'],
+            ['id' => 0, 'text' => 'Đang làm'],
+        ]);
+        $employment_types = collect([
+            ['id' => 0, 'text' => 'Full-time'],
+            ['id' => 1, 'text' => 'Part-time'],
+        ]);
+        $departments = Department::select('id', 'name')->orderBy('name')->get();
+
+        $roles = Role::select('id', 'name')->get();
+        return view('users.create', compact('status', 'employment_types', 'departments', 'roles'));
     }
 
     public function store(StoreUserRequest $request)
@@ -65,24 +75,49 @@ class UserController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit(User $user)
     {
-        $user = User::with('roles')->findOrFail($id);
-        return view('users.edit', compact('user'));
+        $user->load('roles');
+
+        $status = collect([
+            ['id'  => 1, 'text' => 'Đã nghỉ'],
+            ['id' => 0, 'text' => 'Đang làm'],
+        ]);
+        $employment_types = collect([
+            ['id' => 0, 'text' => 'Full-time'],
+            ['id' => 1, 'text' => 'Part-time'],
+        ]);
+        $departments = Department::select('id', 'name')->orderBy('name')->get();
+        $teams = Team::select('id', 'name')
+            ->where('department_id', $user->department_id)
+            ->orderBy('name')
+            ->get();
+
+        $roles = Role::select('id', 'name')->get();
+        return view('users.edit', compact('user', 'status', 'employment_types', 'departments', 'teams', 'roles'));
     }
 
-    public function update(UpdateUserRequest $request, $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $user = User::findOrFail($id);
-        $request->validated();
-
+        $data = $request->validated();
         try {
-            $data = $request->except('password');
-
-            if ($request->filled('password')) {
+            if (!empty($data['password'])) {
                 $data['password'] = Hash::make($request->password);
+            } else {
+                unset($data['password']);
             }
+
+            $roleId = $data['role_id'] ?? null;
+            unset($data['role_id']);
+
             $user->update($data);
+
+            if ($roleId) {
+                $roleName = Role::findById($roleId);
+                $user->syncRoles([$roleName]);
+            } else {
+                $user->syncRoles([]);
+            }
 
             return response()->json(['success' => true, 'msg' => 'Cập nhật thành công'], 200);
         } catch (Exception $e) {
@@ -91,11 +126,9 @@ class UserController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(User $user)
     {
         try {
-            $user = User::findOrFail($id);
-
             if (Auth::id() === $user->id) {
                 return response()->json(['msg' => 'Không thể tự xóa tài khoản của chính mình!'], 403);
             }
@@ -158,12 +191,12 @@ class UserController extends Controller
                         ? '<span class="tw-inline-flex tw-items-center tw-px-2 tw-rounded-xs tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-800">
                             Active
                         </span>'
-                        : '<span class="tw-inline-flex tw-items-center tw-px-2 tw-rounded-xs tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-800">
+                        : '<span class="tw-inline-flex tw-items-center tw-px-2 tw-rounded-xs tw-text-xs tw-font-medium tw-bg-gray-200 tw-text-gray-800">
                             Leave
                         </span>';
                 })
-                ->editColumn('employment_type', function ($user) {
-                    return $user->employment_type === 0 ? 'Full-time' : 'Part-time';
+                ->editColumn('start_date', function ($user) {
+                    return $user->start_date ? Carbon::parse($user->start_date)->format('d/m/Y') : '<div class="tw-text-gray-400 tw-text-xs">---</div>';
                 })
                 ->addColumn('role', function ($user) {
                     return $user->roles->first()->name ?? '<div class="tw-text-gray-400 tw-text-xs">---</div>';
@@ -171,7 +204,7 @@ class UserController extends Controller
                 ->addColumn('action', function ($user) {
                     return view('users._users-action', compact('user'))->render();
                 })
-                ->rawColumns(['gender', 'status', 'role', 'action'])
+                ->rawColumns(['gender', 'status', 'role', 'start_date','action'])
                 ->make(true);
         }
     }
@@ -206,5 +239,18 @@ class UserController extends Controller
             'employment_type_data' => $employment_type_data,
             'role_data' => $role_data,
         ]);
+    }
+
+    public function getTeamsDropdown(Request $request)
+    {
+        $teams_data = Team::select('id', 'name as text')
+            ->when($request->filled('department_id'), function ($q) use ($request) {
+                $q->where('department_id', $request->department_id);
+            }, function ($q) {
+                $q->whereRaw('1 = 0');
+            })
+            ->get();
+
+        return response()->json(['teams_data' => $teams_data]);
     }
 }

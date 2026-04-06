@@ -5,7 +5,7 @@
         <div class="card-header tw-bg-white tw-border-b-0">
 
             {{-- Toolbar --}}
-            <x-toolbar target="slideover-create-user" btnId="btn-open-create" />
+            <x-toolbar target="slideover-create-user" btnId="btn-open-create" dataTableInstance="usersTable" />
 
             <div id="filter-panel" class="tw-hidden tw-pt-5 tw-pb-2">
 
@@ -39,10 +39,10 @@
                         <th>Họ tên</th>
                         <th>Email</th>
                         <th>Bộ phận</th>
-                        <th>Hình thức</th>
                         <th>Trạng thái</th>
                         <th>Số điện thoại</th>
                         <th>Loại tài khoản</th>
+                        <th>Ngày bắt đầu</th>
                         <th>
                             <div class="tw-text-center">Tác vụ</div>
                         </th>
@@ -61,7 +61,9 @@
     <x-slide-over id="slideover-edit-user" title="Cập nhật thông tin nhân viên">
         <div id="content-edit" class="tw-flex tw-flex-col tw-flex-1 tw-min-h-0"></div>
     </x-slide-over>
+@endsection
 
+@push('scripts')
     <script>
         $(function() {
             // ---- RENDER TABLE --------------------------
@@ -98,10 +100,6 @@
                         name: 'department.name',
                     },
                     {
-                        data: 'employment_type',
-                        name: 'employment_type'
-                    },
-                    {
                         data: 'status',
                         name: 'status'
                     },
@@ -115,6 +113,10 @@
                         name: 'role',
                     },
                     {
+                        data: 'start_date',
+                        name: 'start_date',
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
@@ -122,12 +124,11 @@
                         className: 'tw-text-center',
                     }
                 ],
-
                 createdRow: function(row, data) {
                     let url = '{{ route('users.show', ':id') }}'.replace(':id', data.id);
 
                     $(row).css('cursor', 'pointer').on('click', function(e) {
-                        if($(e.target).closest('button').length > 0){
+                        if ($(e.target).closest('button').length > 0) {
                             return;
                         }
                         window.location.href = url;
@@ -141,13 +142,6 @@
                     bottomEnd: 'paging',
                 },
             });
-
-            const loadingHtml = `
-                <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-h-full tw-min-h-[300px] tw-text-gray-500">
-                    <i class="fas fa-spinner fa-spin tw-text-4xl tw-text-[#0063B1] tw-mb-4"></i>
-                    <p class="tw-text-sm">Đang tải dữ liệu...</p>
-                </div>
-            `;
 
             $('#custom-search-input').on('keyup', function() {
                 usersTable.search(this.value).draw();
@@ -171,46 +165,24 @@
                     renderOptions('#f_status', res.status_data);
                     renderOptions('#f_employment_type', res.employment_type_data);
                     renderOptions('#f_role', res.role_data);
-                    renderOptions('#create-department', res.department_data);
-                    renderOptions('#create-team', res.team_data);
-                    renderOptions('#create-user-role', res.role_data);
-
-                    $('#create-department').on('change', function() {
-                        let departmentId = $(this).val();
-
-                        $.getJSON('{{ route('users.filter_data') }}', {
-                                department_id: departmentId
-                            })
-                            .done(function(res) {
-                                renderOptions('#create-team', res.team_data)
-                            });
-                    })
-
-                    function renderOptions(selector, items) {
-                        let $selector = $(selector);
-                        if (!items) items = [];
-
-                        // Reset select
-                        $selector.find('option:not([value=""])').remove();
-                        $selector.val('');
-
-                        let html = '';
-                        items.forEach(item => {
-                            html += `<option value="${item.id}">${item.text}</option>`
-                        })
-                        $selector.append(html);
-                    }
-
-                    $('#f_status, #f_department, #f_employment_type, #f_role').select2({
-                        theme: 'bootstrap4',
-                        minimumResultsForSearch: 10,
-                        width: '100%'
-                    });
                 })
                 .fail(function(xhr) {
                     console.error('Load error:', xhr.status)
                     console.error('Load error:', xhr.responseText)
                 });
+
+            $(document).on('change', '#create-department, #edit-department', function() {
+                let departmentId = $(this).val();
+                let isCreateForm = $(this).attr('id') === 'create-department';
+                let targetTeamSelector = isCreateForm ? '#create-team' : '#edit-team';
+
+                $.getJSON('{{ route('users.teams_data') }}', {
+                        department_id: departmentId
+                    })
+                    .done(function(res) {
+                        renderOptions(targetTeamSelector, res.teams_data)
+                    });
+            })
 
             $(document).on('change', '#filter-panel select', function() {
                 usersTable.ajax.reload();
@@ -236,10 +208,6 @@
                 openSlideover('slideover-create-user')
                 if (preloadedCreateHtml) {
                     $('#content-create').html(preloadedCreateHtml);
-                } else {
-                    $('#content-create').html(loadingHtml);
-                    preloadedCreateHtml = html;
-                    $('#content-create').html(html);
                 }
             })
 
@@ -250,110 +218,15 @@
 
                 $.get(editUrl, function(html) {
                     $('#content-edit').html(html);
-
                 }).fail(function(xhr) {
-                    $('#content-edit').html(
-                        '<div class="tw-text-red-500 tw-text-center tw-mt-10">Lỗi tải dữ liệu. Vui lòng thử lại.</div>'
-                    );
+                    $('#content-edit').html(loadingHtml);
                     console.error('Load edit form error:', xhr.status);
                     console.error('Load edit form error:', xhr.responseText);
                 });
             });
 
-            // Create/edit forms
-            $(document).on('submit', '#form-create-user, #form-edit-user', function(e) {
-                e.preventDefault();
-
-                let form = $(this);
-                let url = form.attr('action');
-                let formData = new FormData(this);
-                let submitBtn = form.find('button[type="submit"]');
-                let originalBtnText = submitBtn.html();
-                let isCreate = form.attr('id') === 'form-create-user';
-
-                submitBtn.prop('disabled', true)
-                    .html('<i class="fas fa-spinner fa-spin tw-mr-2"></i> Đang xử lý...');
-
-                form.find('.field-error').remove();
-                form.find('.tw-border-red-500')
-                    .removeClass('tw-border-red-500')
-                    .addClass('tw-border-gray-300');
-
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(res) {
-                        submitBtn.prop('disabled', false).html(originalBtnText);
-
-                        if (res.success) {
-                            if (isCreate) {
-                                form[0].reset();
-                            }
-
-                            let container = form.closest('.slideover-container');
-                            if (container.length) {
-                                window.closeSlideover(container[0]);
-                            }
-
-                            if (typeof window.usersTable !== 'undefined') {
-                                window.usersTable.ajax.reload(null, false);
-                            }
-
-                            fluentToast({
-                                type: 'success',
-                                title: isCreate ? 'Thêm nhân viên thành công' :
-                                    'Cập nhật nhân viên thành công',
-                                description: isCreate ?
-                                    'Tài khoản đã được cấp quyền truy cập vào hệ thống.' :
-                                    'Thông tin nhân viên đã được cập nhật.',
-                                subtitle: res.msg || '',
-                                actionType: 'close',
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        submitBtn.prop('disabled', false).html(originalBtnText);
-
-                        if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
-                            $.each(xhr.responseJSON.errors, function(field, messages) {
-                                let input = form.find(`[name="${field}"]`);
-
-                                if (input.length) {
-                                    let wrapper = input.closest('.tw-flex-col');
-
-                                    input.closest('.tw-relative')
-                                        .removeClass('tw-border-gray-300')
-                                        .addClass('tw-border-red-500');
-
-                                    wrapper.append(`
-                                        <span class="field-error tw-block tw-text-red-500 tw-text-xs tw-mt-1 tw-font-medium">
-                                            ${messages[0]}
-                                        </span>`);
-                                }
-                            });
-                            fluentToast({
-                                type: 'error',
-                                title: isCreate ? 'Thêm nhân viên thất bại' :
-                                    'Cập nhật nhân viên thất bại',
-                                description: 'Hãy kiểm tra lại các trường thông tin',
-                                subtitle: 'Mã lỗi: ' + xhr.status,
-                                actionType: 'close',
-                            });
-                        } else {
-                            fluentToast({
-                                type: 'error',
-                                title: 'Lỗi hệ thống',
-                                description: 'Đã có lỗi hệ thống, vui lòng thử lại sau!',
-                                subtitle: 'Mã lỗi: ' + xhr.status,
-                                actionType: 'close',
-                            });
-                        }
-                    }
-                });
-            });
+            // --- Handle create/edit user ---------------------------
+            ajaxFormRequest('#form-create-user, #form-edit-user', usersTable)
 
             // ---- Delete user ------------------------
             $(document).on('click', '#delete-user-btn', function() {
@@ -390,7 +263,7 @@
                                             usersTable.ajax
                                                 .reload(
                                                     null, false
-                                                    );
+                                                );
 
                                             fluentToast({
                                                 type: 'success',
@@ -440,4 +313,4 @@
             })
         });
     </script>
-@endsection
+@endpush

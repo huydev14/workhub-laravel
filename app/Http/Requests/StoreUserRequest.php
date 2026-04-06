@@ -47,7 +47,7 @@ class StoreUserRequest extends FormRequest
             'password.required'      => 'Vui lòng tạo mật khẩu đăng nhập.',
             'password.min'           => 'Mật khẩu phải có ít nhất 6 ký tự.',
             'gender.required'        => 'Vui lòng chọn giới tính.',
-            'department_id.required'   => 'Vui lòng chọn phòng ban.',
+            'department_id.required' => 'Vui lòng chọn phòng ban.',
             'department_id.exists'   => 'Phòng ban không hợp lệ.',
             'team_id.exists'         => 'Đội nhóm không hợp lệ.',
             'role_id.exists'         => 'Loại tài khoản không hợp lệ.',
