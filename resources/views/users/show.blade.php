@@ -150,6 +150,11 @@
             </div>
         </div>
     </div>
+
+    {{-- Panel: Edit user --}}
+    <x-slide-over id="slideover-edit-user" title="Cập nhật thông tin nhân viên">
+        <div id="content-edit" class="tw-flex tw-flex-col tw-flex-1 tw-min-h-0"></div>
+    </x-slide-over>
 @endsection
 
 @push('scripts')
@@ -167,5 +172,21 @@
                 $($(this).data('target')).removeClass('tw-hidden');
             });
         });
+
+        $(document).on('click', '.edit-user-btn, #edit-user-btn', function() {
+            let editUrl = $(this).data('edit-url');
+            openSlideover('slideover-edit-user');
+            $('#content-edit').html(loadingHtml);
+
+            $.get(editUrl, function(html) {
+                $('#content-edit').html(html);
+            }).fail(function(xhr) {
+                $('#content-edit').html(loadingHtml);
+                console.error('Load edit form error:', xhr.status);
+                console.error('Load edit form error:', xhr.responseText);
+            });
+        });
+
+        ajaxFormRequest('#form-edit-user', null, true)
     </script>
 @endpush
