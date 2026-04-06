@@ -41,7 +41,7 @@ window.ajaxFormRequest = function (formSelector, dataTableInstance = null, reloa
             data: formData,
             processData: false,
             contentType: false,
-            success: function (res,textStatus, xhr) {
+            success: function (res, textStatus, xhr) {
                 submitBtn.prop('disabled', false).html(originalBtnText);
 
                 if (res.success) {
@@ -72,7 +72,7 @@ window.ajaxFormRequest = function (formSelector, dataTableInstance = null, reloa
                 submitBtn.prop('disabled', false).html(originalBtnText);
 
                 // Validate failed
-                if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                if (xhr.status === 422 && xhr.responseJSON?.errors) {
                     $.each(xhr.responseJSON.errors, function (field, messages) {
                         let input = form.find(`[name="${field}"]`);
                         if (input.length) {
@@ -104,3 +104,46 @@ window.ajaxFormRequest = function (formSelector, dataTableInstance = null, reloa
         });
     });
 };
+
+const ModalHelper = {
+    open: function (modal_id) {
+        const $modal = $('#' + modal_id);
+
+        if (!$modal.length) {
+            console.error('Không tìm thấy Modal với ID: ' + modal_id);
+            return;
+        }
+
+        $modal.removeClass('tw-hidden').addClass('tw-flex');
+        $('body').css('overflow', 'hidden');
+    },
+
+    close: function (modal_id) {
+        const $modal = $('#' + modal_id);
+        if (!$modal.length) return;
+
+        $modal.addClass('tw-hidden').removeClass('tw-flex');
+        $('body').css('overflow', '');
+    },
+
+    init: function () {
+        $(document).on('keydown', function (e) {
+            if (e.key === 'Escape') {
+                $('.tw-fixed:not(.tw-hidden)').each(function () {
+                    ModalHelper.close($(this).attr('id'));
+                });
+            }
+        });
+
+        $(document).on('click', function (e) {
+            const $target = $(e.target);
+            if ($target.hasClass('tw-fixed') && $target.hasClass('tw-bg-gray-900/40')) {
+                ModalHelper.close($target.attr('id'));
+            }
+        });
+    },
+};
+
+$(function () {
+    ModalHelper.init();
+});

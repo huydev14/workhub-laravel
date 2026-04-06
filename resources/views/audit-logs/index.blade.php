@@ -44,6 +44,8 @@
         </div>
     </div>
 
+    @include('audit-logs.modals.audit-logs-detail')
+
     @push('scripts')
         <script>
             $(function() {

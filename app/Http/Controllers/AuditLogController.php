@@ -41,8 +41,7 @@ class AuditLogController extends Controller
                 })
                 ->addColumn('details', function ($log) {
                     if (!empty($log->properties->all())) {
-                        return '<button type="button" class="view-detail-btn tw-text-p hover:tw-underline tw-text-xs tw-font-medium"
-                                data-properties=\'' . json_encode($log->properties) . '\'>
+                        return '<button type="button" onclick="ModalHelper.open(\'logDetailModal\')" class="view-log-btn tw-text-p hover:tw-underline tw-text-xs tw-font-medium">
                                 Xem chi tiết
                             </button>';
                     }
