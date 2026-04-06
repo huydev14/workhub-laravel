@@ -3,6 +3,7 @@
     'name' => '',
     'title' => '',
     'required' => '',
+    'options' => [],
 ])
 
 <div class="tw-flex tw-flex-col tw-gap-1">
@@ -15,6 +16,15 @@
         <select name="{{ $name }}" id="{{ $id }}"
             class="tw-w-full tw-py-1.5 tw-px-2.5 tw-text-sm tw-text-gray-900 tw-bg-transparent tw-border-none tw-outline-none focus:tw-ring-0 tw-appearance-none">
             <option value="">Chọn {{ strtolower($title) }}</option>
+
+            {{ $slot }}
+
+            @if ($options)
+                @foreach ($options as $item)
+                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                @endforeach
+            @endif
+
         </select>
         <i class="fas fa-chevron-down tw-absolute tw-right-3 tw-text-gray-500 tw-text-xs tw-pointer-events-none"></i>
     </div>

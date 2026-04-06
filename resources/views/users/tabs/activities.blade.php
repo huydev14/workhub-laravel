@@ -56,11 +56,10 @@
                     </time>
 
                     @if ($log->event === 'updated' && isset($log->properties['old']) && isset($log->properties['attributes']))
-                        <div class="tw-bg-gray-50 tw-rounded-lg tw-border tw-border-gray-100 tw-p-4 tw-mt-2">
+                        <div class="tw-bg-gray-50 tw-rounded-sm tw-border tw-border-gray-100 tw-p-1 tw-mt-2">
                             <ul class="tw-space-y-3">
                                 @foreach ($log->properties['attributes'] as $key => $newValue)
                                     @php
-                                        // Bỏ qua cột updated_at vì nó luôn thay đổi, không cần log ra UI
                                         if ($key === 'updated_at') {
                                             continue;
                                         }
@@ -76,7 +75,7 @@
                                             class="tw-text-gray-500 tw-w-28 tw-shrink-0 tw-font-medium">{{ ucfirst($key) }}:</span>
                                         <div class="tw-flex tw-items-center tw-flex-wrap tw-gap-2 tw-text-gray-900">
                                             <span
-                                                class="tw-line-through tw-text-red-400 tw-text-xs tw-bg-red-50 tw-px-1.5 tw-py-0.5 tw-rounded">
+                                                class="tw-line-through tw-text-gray-500 tw-text-xs tw-bg-gray-200 tw-px-1.5 tw-py-0.5 tw-rounded">
                                                 {{ $oldValue ?: 'Trống' }}
                                             </span>
 

@@ -27,6 +27,8 @@ Route::middleware('jwt.cookie')->group(function () {
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/data', [UserController::class, 'data'])->name('data');
         Route::get('/filter-data', [UserController::class, 'getFilterData'])->name('filter_data');
+        Route::get('/getTeamsDropdown', [UserController::class, 'getTeamsDropdown'])->name('teams_data');
+
         Route::post('/{id}/restore', [UserController::class, 'restore'])->name('restore');
     });
     Route::resource('users', UserController::class);

@@ -95,13 +95,6 @@
                 },
             });
 
-            const loadingHtml = `
-                <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-h-full tw-min-h-[300px] tw-text-gray-500">
-                    <i class="fas fa-spinner fa-spin tw-text-4xl tw-text-[#0063B1] tw-mb-4"></i>
-                    <p class="tw-text-sm">Đang tải dữ liệu...</p>
-                </div>
-            `;
-
             $('#custom-search-input').on('keyup', function() {
                 table.search(this.value).draw();
             });
@@ -133,26 +126,6 @@
                             });
                     })
 
-                    function renderOptions(selector, items) {
-                        let $selector = $(selector);
-                        if (!items) items = [];
-
-                        // Reset select
-                        $selector.find('option:not([value=""])').remove();
-                        $selector.val('');
-
-                        let html = '';
-                        items.forEach(item => {
-                            html += `<option value="${item.id}">${item.text}</option>`
-                        })
-                        $selector.append(html);
-                    }
-
-                    $('#f_status, #f_department, #f_employment_type, #f_role').select2({
-                        theme: 'bootstrap4',
-                        minimumResultsForSearch: 10,
-                        width: '100%'
-                    });
                 })
                 .fail(function(xhr) {
                     console.error('Load error:', xhr.status)
@@ -170,8 +143,6 @@
                 table.ajax.reload();
             });
 
-
-
             $(document).on('click', '.edit-user-btn, #edit-user-btn', function() {
                 let editUrl = $(this).data('edit-url');
                 openSlideover('slideover-edit-user');
@@ -182,7 +153,7 @@
 
                 }).fail(function(xhr) {
                     $('#content-edit').html(
-                        '<div class="tw-text-red-500 tw-text-center tw-mt-10">Lỗi tải dữ liệu. Vui lòng thử lại.</div>'
+                        '<div class="tw-text-center tw-mt-10">Đã có lỗi xả ra. Vui lòng thử lại sau.</div>'
                     );
                     console.error('Load edit form error:', xhr.status);
                     console.error('Load edit form error:', xhr.responseText);

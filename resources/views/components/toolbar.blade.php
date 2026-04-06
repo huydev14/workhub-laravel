@@ -1,5 +1,5 @@
 {{-- Component: Toolbar --}}
-@props(['target' => null, 'btnId' => ''])
+@props(['target' => null, 'btnId' => '', 'dataTableInstance' => ''])
 
 <div class="fluent-toolbar tw-flex tw-items-center tw-w-full tw-gap-4 tw-border-b tw-border-gray-200">
     <div class="tw-relative tw-flex-1">
@@ -24,7 +24,7 @@
         <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors">
             <x-icon-download />
         </button>
-        <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors" onclick="table.ajax.reload()">
+        <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors" :onclick="$dataTableInstance.ajax.reload()">
             <x-icon-sync />
         </button>
     </div>
