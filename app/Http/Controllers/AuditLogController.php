@@ -19,13 +19,13 @@ class AuditLogController extends Controller
     public function data(Request $request)
     {
         if ($request->ajax()) {
-            $logs = Activity::with(['causer', 'subject'])->latest()->get();
+            $logs = Activity::with(['causer', 'subject'])->latest();
 
             return DataTables::of($logs)
                 ->editColumn('created_at', function ($log) {
                     return Carbon::parse($log->created_at)->format('H:i - d/m/Y');
                 })
-                ->editColumn('causer_name', function ($log) {
+                ->addColumn('causer_name', function ($log) {
                     return $log->causer?->name;
                 })
                 ->editColumn('subject_id', function ($log) {
@@ -36,18 +36,10 @@ class AuditLogController extends Controller
                             ' . $modelName . ' #' . $log->subject_id . '
                             </span>';
                 })
-                ->editColumn('ip_address', function ($log) {
+                ->addColumn('ip_address', function ($log) {
                     return $log->getExtraProperty('ip');
                 })
-                ->addColumn('details', function ($log) {
-                    if (!empty($log->properties->all())) {
-                        return '<button type="button" onclick="ModalHelper.open(\'logDetailModal\')" class="view-log-btn tw-text-p hover:tw-underline tw-text-xs tw-font-medium">
-                                Xem chi tiết
-                            </button>';
-                    }
-                    return '<span class="tw-text-gray-400 tw-text-xs">---</span>';
-                })
-                ->rawColumns(['description', 'subject_id', 'ip_address', 'details'])
+                ->rawColumns(['description', 'subject_id', 'ip_address'])
                 ->make(true);
         }
     }
@@ -84,6 +76,16 @@ class AuditLogController extends Controller
         return response()->json([
             'logNameData' => $logNameData,
             'causerData'  => $causerData,
+        ]);
+    }
+
+    public function show($id)
+    {
+        $activity = Activity::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'data'    => $activity,
         ]);
     }
 }

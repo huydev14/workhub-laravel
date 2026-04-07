@@ -84,12 +84,29 @@
                             orderable: false,
                         },
                         {
-                            data: 'details',
-                            name: 'details',
+                            data: 'id',
                             orderable: false,
                             searchable: false,
+                            render: function(data) {
+                                let url = '{{ route('audit-logs.show', ':id') }}'.replace(':id', data);
+                                return `
+                                <button class="view-log-btn tw-text-blue-600 hover:tw-text-blue-800 tw-font-medium"
+                                data-show-url="${url}">
+                                    Xem chi tiết
+                                </button>`;
+                            }
                         },
                     ],
+                    // createdRow: function(row, data) {
+                    //     let url = '{{ route('audit-logs.show', ':id') }}'.replace(':id', data.id);
+
+                    //     $(row).css('cursor', 'pointer').on('click', function(e) {
+                    //         if ($(e.target).closest('button').length > 0) {
+                    //             return;
+                    //         }
+                    //         window.location.href = url;
+                    //     })
+                    // },
                     layout: {
                         topStart: null,
                         topEnd: null,
@@ -138,6 +155,57 @@
                     minimumResultsForSearch: 10,
                     width: '100%',
                 });
+
+                $('#audit-log-table').on('click', '.view-log-btn', function() {
+                    const showUrl = $(this).data('show-url')
+                    const logId = $(this).data('id');
+
+                    ModalHelper.open('logDetailModal');
+
+                    $.ajax({
+                        url: showUrl,
+                        type: 'GET',
+                        success: function(res) {
+                            const props = res.data.properties || {};
+
+                            $('#logUrl').text(props.url || 'N/A');
+                            $('#logIp').text(props.ip || 'Unknown');
+                            $('#logSessionId').text(props.session_id || 'N/A');
+                            $('#logUserAgent').text(props.user_agent || 'Unknown Device');
+
+                            if (props.is_ajax) {
+                                $('#logAjax').html(
+                                    `<span class="tw-inline-flex tw-items-center tw-rounded-sm tw-bg-blue-100 tw-px-2 tw-py-1 tw-text-xs tw-font-medium tw-text-blue-700">
+                                        AJAX Request
+                                    </span>`
+                                );
+                            } else {
+                                $('#logAjax').html(
+                                    `<span class="tw-inline-flex tw-items-center tw-rounded-sm tw-bg-gray-100 tw-px-2 tw-py-1 tw-text-xs tw-font-medium tw-text-gray-600">
+                                        Trực tiếp (Non-AJAX)
+                                    </span>`
+                                );
+                            }
+
+                            let methodClass = 'tw-bg-gray-100 tw-text-gray-700';
+                            if (props.method === 'GET') methodClass =
+                                'tw-bg-blue-100 tw-text-blue-700';
+                            if (props.method === 'POST') methodClass =
+                                'tw-bg-green-100 tw-text-green-700';
+                            if (props.method === 'DELETE') methodClass =
+                                'tw-bg-red-100 tw-text-red-700';
+                            if (props.method === 'PUT' || props.method === 'PATCH') methodClass =
+                                'tw-bg-orange-100 tw-text-orange-700';
+
+                            $('#logMethod')
+                                .text(props.method || 'N/A')
+                                .removeClass()
+                                .addClass(
+                                    `tw-inline-flex tw-items-center tw-rounded tw-px-2 tw-py-1 tw-text-xs tw-font-bold ${methodClass}`
+                                    );
+                        }
+                    })
+                })
             });
         </script>
     @endpush
