@@ -166,7 +166,24 @@
                         url: showUrl,
                         type: 'GET',
                         success: function(res) {
+                            const data = res.data;
                             const props = res.data.properties || {};
+
+                            $('#logDescription').text(data.description || 'Không có mô tả');
+                            $('#logNameLabel').text(data.log_name || 'N/A');
+
+                            const timeString = data.created_at ? new Date(data.created_at)
+                                .toLocaleString('vi-VN') : 'N/A';
+                            $('#logTime').text(timeString);
+
+                            let causerName = 'system';
+                            if (data.causer) {
+                                causerName = data.causer.name || data.causer.email ||
+                                    `User ID: ${data.causer_id}`;
+                            } else if (data.causer_id) {
+                                causerName = `User ID: ${data.causer_id}`;
+                            }
+                            $('#logCauser').text(causerName);
 
                             $('#logUrl').text(props.url || 'N/A');
                             $('#logIp').text(props.ip || 'Unknown');
@@ -197,12 +214,11 @@
                             if (props.method === 'PUT' || props.method === 'PATCH') methodClass =
                                 'tw-bg-orange-100 tw-text-orange-700';
 
-                            $('#logMethod')
-                                .text(props.method || 'N/A')
+                            $('#logMethod').text(props.method || 'N/A')
                                 .removeClass()
                                 .addClass(
                                     `tw-inline-flex tw-items-center tw-rounded tw-px-2 tw-py-1 tw-text-xs tw-font-bold ${methodClass}`
-                                    );
+                                );
                         }
                     })
                 })
