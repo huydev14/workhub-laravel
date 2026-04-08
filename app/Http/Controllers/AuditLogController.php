@@ -83,9 +83,6 @@ class AuditLogController extends Controller
     {
         $activity = Activity::with('causer')->findOrFail($id);
 
-        return response()->json([
-            'success' => true,
-            'data'    => $activity,
-        ]);
+        return view('audit-logs.show', compact('activity'));
     }
 }

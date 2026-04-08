@@ -44,7 +44,9 @@
         </div>
     </div>
 
-    @include('audit-logs.modals.audit-logs-detail')
+    <x-modal>
+        <div id="audit-logs-content"></div>
+    </x-modal>
 
     @push('scripts')
         <script>
@@ -157,70 +159,19 @@
                 });
 
                 $('#audit-log-table').on('click', '.view-log-btn', function() {
-                    const showUrl = $(this).data('show-url')
-                    const logId = $(this).data('id');
+                    ModalHelper.open('logDetailModal')
+                    $('#audit-logs-content').html(loadingHtml);
 
-                    ModalHelper.open('logDetailModal');
+                    const showUrl = $(this).data('show-url');
 
-                    $.ajax({
-                        url: showUrl,
-                        type: 'GET',
-                        success: function(res) {
-                            const data = res.data;
-                            const props = res.data.properties || {};
-
-                            $('#logDescription').text(data.description || 'Không có mô tả');
-                            $('#logNameLabel').text(data.log_name || 'N/A');
-
-                            const timeString = data.created_at ? new Date(data.created_at)
-                                .toLocaleString('vi-VN') : 'N/A';
-                            $('#logTime').text(timeString);
-
-                            let causerName = 'system';
-                            if (data.causer) {
-                                causerName = data.causer.name || data.causer.email ||
-                                    `User ID: ${data.causer_id}`;
-                            } else if (data.causer_id) {
-                                causerName = `User ID: ${data.causer_id}`;
-                            }
-                            $('#logCauser').text(causerName);
-
-                            $('#logUrl').text(props.url || 'N/A');
-                            $('#logIp').text(props.ip || 'Unknown');
-                            $('#logSessionId').text(props.session_id || 'N/A');
-                            $('#logUserAgent').text(props.user_agent || 'Unknown Device');
-
-                            if (props.is_ajax) {
-                                $('#logAjax').html(
-                                    `<span class="tw-inline-flex tw-items-center tw-rounded-sm tw-bg-blue-100 tw-px-2 tw-py-1 tw-text-xs tw-font-medium tw-text-blue-700">
-                                        AJAX Request
-                                    </span>`
-                                );
-                            } else {
-                                $('#logAjax').html(
-                                    `<span class="tw-inline-flex tw-items-center tw-rounded-sm tw-bg-gray-100 tw-px-2 tw-py-1 tw-text-xs tw-font-medium tw-text-gray-600">
-                                        Trực tiếp (Non-AJAX)
-                                    </span>`
-                                );
-                            }
-
-                            let methodClass = 'tw-bg-gray-100 tw-text-gray-700';
-                            if (props.method === 'GET') methodClass =
-                                'tw-bg-blue-100 tw-text-blue-700';
-                            if (props.method === 'POST') methodClass =
-                                'tw-bg-green-100 tw-text-green-700';
-                            if (props.method === 'DELETE') methodClass =
-                                'tw-bg-red-100 tw-text-red-700';
-                            if (props.method === 'PUT' || props.method === 'PATCH') methodClass =
-                                'tw-bg-orange-100 tw-text-orange-700';
-
-                            $('#logMethod').text(props.method || 'N/A')
-                                .removeClass()
-                                .addClass(
-                                    `tw-inline-flex tw-items-center tw-rounded tw-px-2 tw-py-1 tw-text-xs tw-font-bold ${methodClass}`
-                                );
-                        }
-                    })
+                    $.get(showUrl, function(html) {
+                            $('#audit-logs-content').html(html);
+                        })
+                        .fail(function(xhr) {
+                            $('#audit-logs-content').html(loadingHtml);
+                            console.error('Load audit logs content error:', xhr.status);
+                            console.error('Load audit logs content error:', xhr.responseText);
+                        });
                 })
             });
         </script>
