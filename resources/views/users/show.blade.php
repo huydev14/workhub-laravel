@@ -187,6 +187,6 @@
             });
         });
 
-        ajaxFormRequest('#form-edit-user', null, true)
+        ajaxUserFormRequest('#form-edit-user', null, true)
     </script>
 @endpush

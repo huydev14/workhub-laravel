@@ -44,7 +44,7 @@
                 @yield('page-header')
             </div>
 
-            <div class="content-body">
+            <div class="content-body tw-h-full">
                 @yield('content')
             </div>
         </main>

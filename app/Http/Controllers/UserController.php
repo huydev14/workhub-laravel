@@ -119,7 +119,7 @@ class UserController extends Controller
                 $user->syncRoles([]);
             }
 
-            return response()->json(['success' => true, 'msg' => 'Cập nhật thành công'], 200);
+            return response()->json(['success' => true, 'msg' => 'Cập nhật người dùng thành công'], 200);
         } catch (Exception $e) {
             Log::error('Update user failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString(),]);
             return response()->json(['success' => false, 'msg' => 'Lỗi hệ thống'], 500);
@@ -181,10 +181,17 @@ class UserController extends Controller
             return DataTables::of($users)
                 ->addIndexColumn()
 
-                ->editColumn('gender', function ($user) {
-                    return $user->gender === 0
-                        ? '<span class="badge badge-info">Nam</span>'
-                        : '<span class="badge badge-danger">Nữ</span>';
+                ->addColumn('role', function ($user) {
+                    return $user->roles->first()->name ?? '<div class="tw-text-gray-400 tw-text-xs">---</div>';
+                })
+
+                ->editColumn('employment_type', function ($user) {
+                    return $user->employment_type === 0
+                        ? '<span class="tw-text-xs tw-font-medium">Full-time</span>'
+                        : '<span class="tw-text-xs tw-font-medium">Part-time</span>';
+                })
+                ->editColumn('start_date', function ($user) {
+                    return $user->start_date ? Carbon::parse($user->start_date)->format('d/m/Y') : '<div class="tw-text-gray-400 tw-text-xs">---</div>';
                 })
                 ->editColumn('status', function ($user) {
                     return $user->status === 0
@@ -195,16 +202,10 @@ class UserController extends Controller
                             Leave
                         </span>';
                 })
-                ->editColumn('start_date', function ($user) {
-                    return $user->start_date ? Carbon::parse($user->start_date)->format('d/m/Y') : '<div class="tw-text-gray-400 tw-text-xs">---</div>';
-                })
-                ->addColumn('role', function ($user) {
-                    return $user->roles->first()->name ?? '<div class="tw-text-gray-400 tw-text-xs">---</div>';
-                })
                 ->addColumn('action', function ($user) {
                     return view('users._users-action', compact('user'))->render();
                 })
-                ->rawColumns(['gender', 'status', 'role', 'start_date','action'])
+                ->rawColumns(['employment_type','role', 'start_date','status','action'])
                 ->make(true);
         }
     }

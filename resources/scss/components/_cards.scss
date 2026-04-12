@@ -1,8 +1,13 @@
 @use '../base/variables' as *;
 
 .fluent-card {
+    height: 100%;
     border: none !important;
     border-radius: 4px !important;
     box-shadow: $shadow-depth-4;
     background-color: #fff;
+
+    .card-header {
+        padding-bottom: 0px !important;
+    }
 }

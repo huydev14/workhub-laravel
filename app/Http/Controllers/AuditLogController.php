@@ -21,6 +21,14 @@ class AuditLogController extends Controller
         if ($request->ajax()) {
             $logs = Activity::with(['causer', 'subject'])->latest();
 
+            if ($request->filled('log_name')) {
+                $logs->where('log_name', $request->log_name);
+            }
+
+            if ($request->filled('causer_id')) {
+                $logs->where('causer_id', $request->causer_id);
+            }
+
             return DataTables::of($logs)
                 ->editColumn('created_at', function ($log) {
                     return Carbon::parse($log->created_at)->format('H:i - d/m/Y');

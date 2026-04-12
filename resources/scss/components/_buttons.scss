@@ -1,22 +1,6 @@
 @use '../base/variables' as *;
 
-#btn-clear-filters {
-    background: $sub-surface-color !important;
-    color: $text-main !important;
-    border: 1px solid $neutral-border;
-    border-radius: 4px;
-    padding: 0 10px;
-    height: 34px;
-
-    &:hover {
-        background: $hover-bg !important;
-    }
-    &:active {
-    transform: scale(0.98);
-}
-}
-
-.assign-role-btn{
+.assign-role-btn {
     color: $text-subtle;
 
     &:hover {
@@ -24,29 +8,22 @@
     }
 }
 
-.action-button {
-    background-color: $navy-blue;
-    border-radius: 4px;
-    &:hover {
-
-    }
-}
-
 .user-action-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 26px;
+    height: 26px;
     border: 0;
-    border-radius: 6px;
+    border-radius: 4px;
     background: transparent;
-    color: #6b7280;
-    transition: color 0.2s ease, background-color 0.2s ease, transform 0.12s ease;
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.12s ease;
 
     &:hover {
-        background-color: #eff6ff;
-        color: #0f6cbd;
+        background-color: $sub-surface-color;
     }
 
     &:active {

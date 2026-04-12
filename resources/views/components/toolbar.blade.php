@@ -10,7 +10,7 @@
             class="tw-w-full tw-pl-10 tw-pr-3 tw-py-2 tw-text-sm tw-text-gray-900 tw-bg-transparent tw-border-none">
     </div>
 
-    <button id="toggle-filter-btn" class="tw-text-gray-500 hover:tw-text-[#0f6cbd] tw-px-1 tw-transition-colors"
+    <button id="toggle-filter-btn" class="tw-text-gray-500 hover:tw-text-[#0f6cbd] tw-transition-colors"
         title="Filter">
         <i class="fas fa-filter tw-text-gray-500"></i>
     </button>
@@ -24,7 +24,7 @@
         <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors">
             <x-icon-download />
         </button>
-        
+
         @if ($dataTableInstance)
             <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors"
                 onclick="{{ $dataTableInstance }}.ajax.reload()">

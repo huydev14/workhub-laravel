@@ -6,21 +6,16 @@
             {{-- Toolbar --}}
             <x-toolbar dataTableInstance="auditLogTable" />
 
-            <div id="filter-panel" class="tw-hidden tw-pt-5 tw-pb-2">
+            <div id="filter-panel" class="tw-pt-3 tw-pb-5">
 
-                <div class="tw-flex tw-justify-between tw-items-center tw-mb-5">
+                <div class="tw-flex tw-justify-between tw-items-center tw-mb-2">
                     <h4 class="tw-text-base tw-font-bold tw-text-gray-800">Filter</h4>
-                    <div class="tw-flex tw-items-center tw-gap-4">
-                        <button id="btn-clear-filters" class="tw-text-sm tw-font-medium">
-                            Clear all
-                        </button>
-                        <button id="close-filter-btn" class="tw-text-gray-400 hover:tw-text-gray-700 tw-transition-colors">
-                            <i class="fas fa-times tw-text-lg"></i>
-                        </button>
-                    </div>
+                    <button id="close-filter-btn" class="tw-text-gray-400 hover:tw-text-gray-700 tw-transition-colors">
+                        <i class="fas fa-times tw-text-lg"></i>
+                    </button>
                 </div>
 
-                <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-x-8 tw-gap-y-6">
+                <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-x-8 tw-gap-y-4">
                     <x-filter-select id="f_logName" label="Phân hệ" />
                     <x-filter-select id="f_causer" label="Actor / Causer" />
                 </div>
@@ -58,6 +53,10 @@
                     autoWidth: false,
                     ajax: {
                         url: '{!! route('audit-logs.data') !!}',
+                        data: function(d) {
+                            d.log_name = $('#f_logName').val() || '';
+                            d.causer_id = $('#f_causer').val() || '';
+                        },
                     },
                     order: [],
                     columns: [{
@@ -121,13 +120,15 @@
                 });
 
                 // ---- FILTER PANEL TOGGLE ---------------------------
-                $('#toggle-filter-btn').on('click', function() {
+                $('#toggle-filter-btn, #close-filter-btn').on('click', function() {
                     $('#filter-panel').slideToggle('fast');
-                    $(this).toggleClass('tw-text-[#0f6cbd] tw-bg-blue-50 tw-rounded');
 
                     // Reset filter
-                    $('#f_logName, #f_causer').val('').trigger(
-                        'change.select2');
+                    $('#f_logName, #f_causer').val('').trigger('change.select2');
+                    auditLogTable.ajax.reload();
+                });
+
+                $(document).on('change', '#filter-panel select', function() {
                     auditLogTable.ajax.reload();
                 });
 
@@ -141,22 +142,6 @@
                         console.error('Load error:', xhr.status)
                         console.error('Load error:', xhr.responseText)
                     });
-
-                $(document).on('change', '#filter-panel select', function() {
-                    auditLogTable.ajax.reload();
-                });
-
-                // Clear filter
-                $(document).on('click', '#btn-clear-filters', function() {
-                    $('#f_logName, #f_causer').val('').trigger('change.select2');
-                    auditLogTable.ajax.reload();
-                });
-
-                $('#f_logName, #f_causer').select2({
-                    theme: 'bootstrap4',
-                    minimumResultsForSearch: 10,
-                    width: '100%',
-                });
 
                 $('#audit-log-table').on('click', '.view-log-btn', function() {
                     ModalHelper.open('logDetailModal')
