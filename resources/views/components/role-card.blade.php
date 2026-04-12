@@ -25,7 +25,7 @@
                         <i class="fas fa-pen tw-mr-2.5 tw-text-gray-400 tw-w-3"></i> Sửa thông tin
                     </a>
                     <button
-                        type="button"
+                        type="button" id="delete-role-btn"
                         data-delete-url="{{ route('roles.destroy', $roleId) }}"
                         onclick="deleteRole({{ $roleId }}, '{{ $title }}')"
                         class="tw-w-full tw-flex tw-items-center tw-px-4 tw-py-2 tw-text-[13px] tw-text-red-600 hover:tw-bg-red-50 tw-transition-colors">

@@ -4,10 +4,23 @@
     <div class="tw-min-h-screen tw-bg-gray-50/50 tw-py-8">
         <div class="tw-max-w-5xl tw-mx-auto tw-px-4 sm:tw-px-6 lg:tw-px-8">
 
-            <form action="{{ route('roles.store') }}" method="POST" id="role-form" novalidate>
-                @csrf
+            <div class="tw-mb-6 tw-flex tw-items-center tw-justify-between">
+                <div>
+                    <h2 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-tracking-tight">Chỉnh sửa Vai trò</h2>
+                    <p class="tw-text-sm tw-text-gray-500 tw-mt-1">
+                        Cập nhật thông tin và quyền hạn cho vai trò: <span
+                            class="tw-font-semibold tw-text-blue-600">{{ $role->name }}</span>
+                    </p>
+                </div>
+                <a href="{{ route('roles.index') }}"
+                    class="tw-text-sm tw-font-medium tw-text-gray-600 hover:tw-text-gray-900 tw-transition-colors tw-flex tw-items-center tw-gap-2 tw-bg-white tw-px-4 tw-py-2 tw-rounded-md tw-border tw-border-gray-200 tw-shadow-sm">
+                    <i class="fas fa-arrow-left"></i> Quay lại
+                </a>
+            </div>
 
-                <div class="tw-space-y-6">
+            <form action="{{ route('roles.update', $role->id) }}" method="POST" id="role-form" novalidate>
+                @csrf
+                @method('PUT') <div class="tw-space-y-6">
                     <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-shadow-md tw-overflow-hidden">
                         <div class="tw-px-6 tw-py-4 tw-border-b tw-border-gray-100 tw-bg-gray-50/50">
                             <h4 class="tw-text-base tw-font-semibold tw-text-gray-900 tw-flex tw-items-center tw-gap-2">
@@ -20,16 +33,16 @@
                                     <label for="name"
                                         class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-1.5">Tên vai trò
                                         <span class="tw-text-red-500">*</span></label>
-                                    <input type="text" name="name" id="name"
+                                    <input type="text" name="name" id="name" value="{{ $role->name }}"
                                         placeholder="VD: Quản trị viên, Nhân sự..." required
                                         class="tw-w-full tw-rounded-md tw-border-gray-300 tw-shadow-sm focus:tw-border-blue-500 focus:tw-ring-blue-500 tw-text-sm tw-py-2 tw-px-3 tw-transition-colors">
                                 </div>
 
                                 <div>
-                                    <label for="guard_name"
+                                    <label for="description"
                                         class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-1.5">Description</label>
                                     <input type="text" name="description" id="description"
-                                        placeholder="Nhập mô tả cho vai trò..."
+                                        value="{{ $role->description ?? '' }}" placeholder="Nhập mô tả cho vai trò..."
                                         class="tw-w-full tw-rounded-md tw-border-gray-300 tw-shadow-sm tw-text-sm tw-py-2 tw-px-3 focus:tw-outline-none">
                                 </div>
                             </div>
@@ -78,21 +91,25 @@
                                 <div class="accordion-body tw-hidden tw-flex tw-flex-col">
                                     <div>
                                         <x-checkbox label="Xem người dùng" name="permissions[]" value="users.view"
+                                            :checked="in_array('users.view', $rolePermissions)"
                                             class="tw-flex tw-items-center tw-cursor-pointer tw-w-full tw-px-6 tw-py-4 tw-border-b tw-border-gray-100 hover:tw-bg-gray-50 tw-transition-colors" />
                                     </div>
 
                                     <div>
                                         <x-checkbox label="Tạo mới người dùng" name="permissions[]" value="users.create"
+                                            :checked="in_array('users.create', $rolePermissions)"
                                             class="tw-flex tw-items-center tw-cursor-pointer tw-w-full tw-px-6 tw-py-4 tw-border-b tw-border-gray-100 hover:tw-bg-gray-50 tw-transition-colors" />
                                     </div>
 
                                     <div>
                                         <x-checkbox label="Chỉnh sửa người dùng" name="permissions[]" value="users.edit"
+                                            :checked="in_array('users.edit', $rolePermissions)"
                                             class="tw-flex tw-items-center tw-cursor-pointer tw-w-full tw-px-6 tw-py-4 tw-border-b tw-border-gray-100 hover:tw-bg-gray-50 tw-transition-colors" />
                                     </div>
 
                                     <div>
                                         <x-checkbox label="Xóa người dùng" name="permissions[]" value="users.remove"
+                                            :checked="in_array('users.remove', $rolePermissions)"
                                             class="tw-flex tw-items-center tw-cursor-pointer tw-w-full tw-px-6 tw-py-4 tw-border-b tw-border-gray-100 hover:tw-bg-gray-50 tw-transition-colors" />
                                     </div>
                                 </div>
@@ -126,25 +143,25 @@
                                 <div class="accordion-body tw-hidden tw-flex tw-flex-col">
                                     <div>
                                         <x-checkbox label="Xem vai trò và phân quyền" name="permissions[]"
-                                            value="roles.view"
+                                            value="roles.view" :checked="in_array('roles.view', $rolePermissions)"
                                             class="tw-flex tw-items-center tw-cursor-pointer tw-w-full tw-px-6 tw-py-4 tw-border-b tw-border-gray-100 hover:tw-bg-gray-50 tw-transition-colors" />
                                     </div>
 
                                     <div>
                                         <x-checkbox label="Tạo mới vai trò và phân quyền" name="permissions[]"
-                                            value="roles.create"
+                                            value="roles.create" :checked="in_array('roles.create', $rolePermissions)"
                                             class="tw-flex tw-items-center tw-cursor-pointer tw-w-full tw-px-6 tw-py-4 tw-border-b tw-border-gray-100 hover:tw-bg-gray-50 tw-transition-colors" />
                                     </div>
 
                                     <div>
                                         <x-checkbox label="Chỉnh sửa vai trò và phân quyền" name="permissions[]"
-                                            value="roles.edit"
+                                            value="roles.edit" :checked="in_array('roles.edit', $rolePermissions)"
                                             class="tw-flex tw-items-center tw-cursor-pointer tw-w-full tw-px-6 tw-py-4 tw-border-b tw-border-gray-100 hover:tw-bg-gray-50 tw-transition-colors" />
                                     </div>
 
                                     <div>
                                         <x-checkbox label="Xóa vai trò và phân quyền" name="permissions[]"
-                                            value="roles.remove"
+                                            value="roles.remove" :checked="in_array('roles.remove', $rolePermissions)"
                                             class="tw-flex tw-items-center tw-cursor-pointer tw-w-full tw-px-6 tw-py-4 tw-border-b tw-border-gray-100 hover:tw-bg-gray-50 tw-transition-colors" />
                                     </div>
                                 </div>
@@ -179,11 +196,13 @@
 
                                     <div>
                                         <x-checkbox label="Xem danh sách logs" name="permissions[]" value="log.view"
+                                            :checked="in_array('log.view', $rolePermissions)"
                                             class="tw-flex tw-items-center tw-cursor-pointer tw-w-full tw-px-6 tw-py-4 tw-border-b tw-border-gray-100 hover:tw-bg-gray-50 tw-transition-colors" />
                                     </div>
 
                                     <div>
                                         <x-checkbox label="Xem chi tiết" name="permissions[]" value="log.detail"
+                                            :checked="in_array('log.detail', $rolePermissions)"
                                             class="tw-flex tw-items-center tw-cursor-pointer tw-w-full tw-px-6 tw-py-4 tw-border-b tw-border-gray-100 hover:tw-bg-gray-50 tw-transition-colors" />
                                     </div>
                                 </div>
@@ -204,7 +223,6 @@
                         Cancel
                     </a>
                 </div>
-
             </form>
         </div>
     </div>

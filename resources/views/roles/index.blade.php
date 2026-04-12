@@ -50,31 +50,30 @@
                     $('.role-dropdown-menu').addClass('tw-hidden');
                 }
             });
+
+            $(document).on('click', '#delete-role-btn', function() {
+                if (confirm(`Bạn có chắc muốn xóa vai trò này không?`)) {
+                    let $btn = $(this);
+                    let deleteUrl = $btn.data('delete-url');
+                    let restoreUrl = $btn.data('restore-url');
+
+                    $btn.prop('disabled', true);
+                    $.ajax({
+                        type: 'DELETE',
+                        url: deleteUrl,
+                        success: function(res) {
+                            window.location.reload();
+                        },
+                        error: function(xhr) {
+                            console.error('Load error:', xhr.status)
+                            console.error('Load error:', xhr.responseText)
+                        },
+                        complete: function() {
+                            $btn.prop('disabled', false);
+                        }
+                    })
+                }
+            })
         });
-
-        // function deleteRole(roleId, roleName) {
-        //     if (confirm(`Bạn có chắc chắn muốn xóa vai trò "${roleName}" không?`)) {
-        //         let $btn = $(this);
-        //         let deleteUrl = $btn.data('delete-url');
-        //         let restoreUrl = $btn.data('restore-url');
-
-        //         $btn.prop('disabled', true);
-        //         $.ajax({
-        //             type: 'DELETE',
-        //             url: deleteUrl,
-        //             success: function(res) {
-        //                 alert('Đã xóa thành công');
-        //             },
-        //             error: function(xhr) {
-        //                 console.error('Load error:', xhr.status)
-        //                 console.error('Load error:', xhr.responseText)
-        //             },
-        //             complete: function() {
-        //                 $btn.prop('disabled', false);
-        //             }
-        //         })
-
-        //     }
-        // }
     </script>
 @endpush
