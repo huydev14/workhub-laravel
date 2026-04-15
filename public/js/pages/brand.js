@@ -124,11 +124,10 @@ $(function () {
                         {
                             text: 'Hoàn tác',
 
-                            // Restore soft-deleted brand
                             onClick: function () {
                                 $.ajax({
                                     type: 'POST',
-                                    url: '/brands/restore' + data.id,
+                                    url: '/brands/restore/' + data.id,
                                     success: function (res) {
                                         brandTable.ajax.reload(null, false);
 
@@ -182,6 +181,64 @@ $(function () {
             $('#create-brand-content').html(loadingHtml);
             console.error('Load create modal error:', xhr.status);
             console.error('Load create modal error:', xhr.responseText);
+        });
+    });
+
+    $(document).on('submit', '#form-create-brand', function (e) {
+        e.preventDefault();
+        let form = $(this);
+        let formData = new FormData(this);
+        let submitBtn = form.find('button[type="submit"]');
+
+        let originalBtnText = submitBtn.html();
+        submitBtn.html('<i class="fas fa-spinner fa-spin tw-mr-2"></i> Đang lưu...').prop('disabled', true);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+
+            success: function (res) {
+                if (res.success) {
+                    globalThis.location.href = res.redirect;
+                }
+            },
+            error: function (xhr) {
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON?.errors || {};
+                    if (!Object.keys(errors).length) {
+                        fluentToast({
+                            type: 'error',
+                            title: 'Xử lý thất bại',
+                            description: 'Dữ liệu không hợp lệ. Vui lòng kiểm tra lại các trường nhập.',
+                            subtitle: 'Mã lỗi: ' + xhr.status,
+                            actionType: 'close',
+                        });
+                        return;
+                    }
+                    let firstErrorMsg = Object.values(errors)[0][0];
+                    fluentToast({
+                        type: 'error',
+                        title: 'Xử lý thất bại',
+                        description: firstErrorMsg,
+                        subtitle: 'Mã lỗi: ' + xhr.status,
+                        actionType: 'close',
+                    });
+                } else {
+                    fluentToast({
+                        type: 'error',
+                        title: 'Lỗi hệ thống',
+                        description: xhr.responseJSON?.msg || 'Đã có lỗi hệ thống xảy ra!',
+                        subtitle: 'Mã lỗi: ' + xhr.status,
+                        actionType: 'close',
+                    });
+                }
+            },
+            complete: function () {
+                submitBtn.html(originalBtnText).prop('disabled', false);
+            },
         });
     });
 });

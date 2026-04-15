@@ -5,10 +5,11 @@
         <div class="card-header tw-bg-white tw-border-b-0">
 
             {{-- Toolbar --}}
-            <x-toolbar target="slideover-create-user" btnId="btn-open-create" dataTableInstance="usersTable" />
+            <x-toolbar dataTableInstance="usersTable">
+                <x-create-button btnId="btn-open-create" target="slideover-create-user" />
+            </x-toolbar>
 
             <div id="filter-panel" class="tw-py-3">
-
                 <div class="tw-flex tw-justify-between tw-items-center tw-mb-2">
                     <h4 class="tw-text-base tw-font-bold tw-text-gray-800">Filter</h4>
                     <button id="close-filter-btn" class="tw-text-gray-400 hover:tw-text-gray-700 tw-transition-colors">

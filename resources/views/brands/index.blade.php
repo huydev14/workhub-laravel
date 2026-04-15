@@ -7,6 +7,7 @@
             {{-- Toolbar --}}
             <x-toolbar dataTableInstance="brandTable">
                 <x-create-button btnId="create-brand" />
+
             </x-toolbar>
 
             <div id="filter-panel" class="tw-py-3">
@@ -51,5 +52,18 @@
 
     @push('scripts')
         <script src="{{ asset('js/pages/brand.js') }}"></script>
+        <script>
+            $(function() {
+                @if (session('success'))
+                    fluentToast({
+                        type: 'success',
+                        title: 'Thành công',
+                        description: "{{ session('success') }}",
+                        subtitle: 'Code: 200',
+                        actionType: 'close',
+                    });
+                @endif
+            })
+        </script>
     @endpush
 @endsection

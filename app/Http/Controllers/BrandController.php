@@ -8,6 +8,7 @@ use DragonCode\Support\Facades\Helpers\Str;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
 class BrandController extends Controller
@@ -72,7 +73,7 @@ class BrandController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'name' => 'required|string|min:2|max:255|unique:brands,name',
             'website' => 'nullable|url|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -83,12 +84,11 @@ class BrandController extends Controller
         ]);
 
         $logoPath = null;
-
         if ($request->hasFile('logo')) {
             $logoPath = $request->file('logo')->store('brands', 'public');
         }
         try {
-            $brand = Brand::create([
+            Brand::create([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
                 'website' => $request->website,
@@ -96,10 +96,23 @@ class BrandController extends Controller
                 'is_active' => $request->has('is_active'),
             ]);
 
-            return response()->json(['success' => true, 'msg' => 'Thêm thương hiệu thành công!'], 200);
-        } catch (Exception $e) {
+            if ($request->ajax()) {
+                session()->flash('success', 'Thêm thương hiệu thành công!');
 
-            Log::error('Create brand failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+                return response()->json([
+                    'success' => true,
+                    'msg' => 'Thêm thương hiệu thành công!',
+                ], 200);
+            }
+            return redirect()->route('brands.index')->with('success', 'Thêm thương hiệu thành công!');
+        } catch (Exception $e) {
+            if ($logoPath) {
+                Storage::disk('public')->delete($logoPath);
+            }
+
+            Log::error('Create brand failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
             return response()->json([
                 'status' => 'error',
                 'msg' => 'Lỗi hệ thống'
