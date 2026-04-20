@@ -21,11 +21,11 @@ Route::get('lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang.switch');
 
-Route::middleware('jwt.cookie')->group(function () {
+Route::prefix('admin')->middleware('jwt.cookie')->group(function () {
     // ---- Dashboard -----------------------------------
     Route::get('/', function () {
         return view('dashboard.index');
-    })->middleware('jwt.cookie')->name('dashboard');
+    })->name('dashboard');
 
     // ---- Users ---------------------------------------
     Route::prefix('users')->name('users.')->group(function () {
