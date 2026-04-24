@@ -22,36 +22,21 @@ api.interceptors.response.use(
         const originalRequest = error.config;
 
         if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/refresh') {
-            originalRequest._retry = true; 
+            originalRequest._retry = true;
+
             const store = useAuthStore();
 
             try {
-                const res = await axios.post(
-                    '/refresh',
-                    {},
-                    {
-                        baseURL: '/api/v1',
-                        withCredentials: true,
-                    },
-                );
-
-                const { access_token, user } = res.data.data;
-
-                store.token = access_token;
-                store.user = user;
-
-                localStorage.setItem('access_token', access_token);
-                localStorage.setItem('user', JSON.stringify(user));
-
-                originalRequest.headers.Authorization = `Bearer ${access_token}`;
-                return api(originalRequest);
+                const success = await store.silentRefresh();
+                if (success) {
+                    originalRequest.headers.Authorization = `Bearer ${store.token}`;
+                    return api(originalRequest);
+                }
             } catch (refreshError) {
-                store.forceLogout();
-                return Promise.reject(refreshError);
+                throw refreshError;
             }
         }
-
-        return Promise.reject(error);
+       throw error;
     },
 );
 export default api;

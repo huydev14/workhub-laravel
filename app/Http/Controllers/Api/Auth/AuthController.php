@@ -9,11 +9,12 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 class AuthController extends Controller
 {
@@ -184,7 +185,6 @@ class AuthController extends Controller
                 'message' => 'Không thể vô hiệu hóa token'
             ], 500);
         }
-
     }
 
     protected function responseWithToken($token)
@@ -206,10 +206,11 @@ class AuthController extends Controller
             if (!$refreshToken) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Không tìm thấy phiên làm việc'
+                    'message' => 'Không tìm thấy phiên làm việc. Vui lòng đăng nhập lại.'
                 ], 401);
             }
 
+            // Validate and refresh token
             $newToken = $this->guard()->setToken($refreshToken)->refresh();
 
             return $this->responseWithToken($newToken);
@@ -217,12 +218,18 @@ class AuthController extends Controller
         } catch (TokenBlacklistedException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Phiên đăng nhập đã bị thu hồi'
+                'message' => 'Phiên đăng nhập đã bị thu hồi. Vui lòng đăng nhập lại.'
             ], 401);
-        } catch (Exception $e) {
+        } catch (TokenExpiredException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Phiên đăng nhập không hợp lệ hoặc đã hết hạn'
+                'message' => 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.'
+            ], 401);
+        } catch (Exception $e) {
+            Log::error('Refresh token error: ' . $e->getMessage() . ' on line ' . $e->getLine());
+            return response()->json([
+                'success' => false,
+                'message' => 'Phiên đăng nhập không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại.'
             ], 401);
         }
     }

@@ -9,10 +9,9 @@ const app = createApp(App);
 const pinia = createPinia();
 
 app.use(pinia);
+
+const authStore = useAuthStore();
+authStore.setupWatcher();
+
 app.use(router);
-
-const authStore = useAuthStore(pinia);
-
-authStore.silentRefresh().finally(() => {
-    app.mount('#client-app');
-});
+app.mount('#client-app');

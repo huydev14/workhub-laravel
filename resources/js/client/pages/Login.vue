@@ -52,7 +52,7 @@
                 <div class="a-divider a-divider-break">
                     <h5>Mới biết đến Amahuy?</h5>
                 </div>
-                <router-link to="/client/register" custom v-slot="{ navigate }">
+                <router-link :to="{ name: 'Register'}" custom v-slot="{ navigate }">
                     <button @click="navigate" class="a-button-secondary">Tạo tài khoản Amahuy của bạn</button>
                 </router-link>
             </div>

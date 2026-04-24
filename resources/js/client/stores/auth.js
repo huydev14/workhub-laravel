@@ -20,10 +20,8 @@ export const useAuthStore = defineStore('auth', {
                     console.log('Pinia changed, syncing to LocalStorage...');
                     if (state.token) {
                         localStorage.setItem('access_token', state.token);
-                        api.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
                     } else {
                         localStorage.removeItem('access_token');
-                        delete api.defaults.headers.common['Authorization'];
                     }
 
                     if (state.user) {
@@ -39,10 +37,8 @@ export const useAuthStore = defineStore('auth', {
         },
         async login(credentials) {
             const response = await api.post('/login', credentials);
-
             if (response.data.success) {
                 const { access_token, user } = response.data.data;
-
                 this.token = access_token;
                 this.user = user;
             }
@@ -84,7 +80,9 @@ export const useAuthStore = defineStore('auth', {
             this.user = null;
             this.token = null;
 
-            router.push({ name: 'Login' });
+            if (router.currentRoute.value.name !== 'Login') {
+                router.push({ name: 'Login' });
+            }
         },
     },
 });
