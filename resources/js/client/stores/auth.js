@@ -6,7 +6,7 @@ import router from '../router';
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         user: JSON.parse(localStorage.getItem('user')) || null,
-        token: localStorage.getItem('access_token' || null),
+        token: localStorage.getItem('access_token') || null,
     }),
 
     getters: {
@@ -14,6 +14,29 @@ export const useAuthStore = defineStore('auth', {
     },
 
     actions: {
+        setupWatcher() {
+            this.$subscribe(
+                (mutation, state) => {
+                    console.log('Pinia changed, syncing to LocalStorage...');
+                    if (state.token) {
+                        localStorage.setItem('access_token', state.token);
+                        api.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
+                    } else {
+                        localStorage.removeItem('access_token');
+                        delete api.defaults.headers.common['Authorization'];
+                    }
+
+                    if (state.user) {
+                        localStorage.setItem('user', JSON.stringify(state.user));
+                    } else {
+                        localStorage.removeItem('user');
+                    }
+                },
+                {
+                    detached: true,
+                },
+            );
+        },
         async login(credentials) {
             const response = await api.post('/login', credentials);
 
@@ -22,11 +45,6 @@ export const useAuthStore = defineStore('auth', {
 
                 this.token = access_token;
                 this.user = user;
-
-                localStorage.setItem('access_token', access_token);
-                localStorage.setItem('user', JSON.stringify(user));
-
-                api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
             }
             return response.data;
         },
@@ -41,14 +59,10 @@ export const useAuthStore = defineStore('auth', {
                         withCredentials: true,
                     },
                 );
-
                 const { access_token, user } = res.data.data;
 
                 this.token = access_token;
                 this.user = user;
-
-                localStorage.setItem('access_token', access_token);
-                localStorage.setItem('user', JSON.stringify(user));
 
                 return true;
             } catch (error) {
@@ -70,10 +84,6 @@ export const useAuthStore = defineStore('auth', {
             this.user = null;
             this.token = null;
 
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user');
-
-            delete api.defaults.headers.common['Authorization'];
             router.push({ name: 'Login' });
         },
     },

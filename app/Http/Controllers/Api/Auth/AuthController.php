@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
 class AuthController extends Controller
@@ -168,14 +169,22 @@ class AuthController extends Controller
 
     public function logout()
     {
-        $this->guard()->logout();
+        try {
+            $this->guard()->logout();
 
-        $cookie = cookie()->forget('refresh_token');
+            $cookie = cookie()->forget('refresh_token');
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Đăng xuất thành công'
-        ])->withCookie($cookie);
+            return response()->json([
+                'success' => true,
+                'message' => 'Đăng xuất thành công'
+            ])->withCookie($cookie);
+        } catch (JWTException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể vô hiệu hóa token'
+            ], 500);
+        }
+
     }
 
     protected function responseWithToken($token)

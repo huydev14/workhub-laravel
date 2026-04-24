@@ -37,18 +37,16 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
     const authStore = useAuthStore();
     const isAuthenticated = authStore.isLoggedIn;
 
     if (to.meta.requiresAuth && !isAuthenticated) {
-        next({ name: 'Login' });
-    }
-    else if (to.meta.guestOnly && isAuthenticated) {
-        next({ name: 'Home' });
-    }
-    else {
-        next();
+        return { name: 'Login' };
+    } else if (to.meta.guestOnly && isAuthenticated) {
+        return { name: 'Home' };
+    } else {
+        return true;
     }
 });
 
