@@ -13,6 +13,20 @@
             <button type="submit" class="a-button-primary" :disabled="isLoading">
                 {{ isLoading ? 'Đang kiểm tra...' : 'Tiếp tục' }}
             </button>
+
+            <div class="a-divider a-divider-break tw-mt-5 tw-mb-5">
+                <h5>Hoặc</h5>
+            </div>
+
+            <button
+                type="button"
+                @click="loginWithSocial('google')"
+                class="a-button-secondary w-100 social-btn"
+                :disabled="isLoading"
+            >
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo" class="social-icon" />
+                Tiếp tục với Google
+            </button>
         </form>
 
         <form v-else-if="step === 'password'" @submit.prevent="handleLogin" class="login-form" novalidate>
@@ -53,7 +67,7 @@
                     <h5>Mới biết đến Amahuy?</h5>
                 </div>
                 <router-link :to="{ name: 'Register'}" custom v-slot="{ navigate }">
-                    <button @click="navigate" class="a-button-secondary">Tạo tài khoản Amahuy của bạn</button>
+                    <button @click="navigate" class="a-button-secondary w-100">Tạo tài khoản Amahuy của bạn</button>
                 </router-link>
             </div>
 
@@ -88,7 +102,6 @@ const form = reactive({
 const isLoading = ref(false);
 const errorMessage = ref('');
 
-
 const currentTitle = computed(() => {
     if (step.value === 'email') return 'Đăng nhập hoặc tạo tài khoản';
     if (step.value === 'password') return 'Đăng nhập';
@@ -120,7 +133,6 @@ const handleCheckEmail = async () => {
     }
 };
 
-// Gọi API Đăng nhập
 const handleLogin = async () => {
     isLoading.value = true;
     errorMessage.value = '';
@@ -145,14 +157,43 @@ const handleLogin = async () => {
     }
 };
 
-// Đẩy dữ liệu email sang trang đăng ký để khách không phải gõ lại
 const goToRegister = () => {
     router.push({ name: 'Register', query: { email: form.email } });
+};
+
+const loginWithSocial = (provider) => {
+    errorMessage.value = '';
+
+    const width = 500, height = 600;
+    const left = window.innerWidth / 2 - width / 2;
+    const top = window.innerHeight / 2 - height / 2;
+
+    const url = `http://127.0.0.1:8000/api/v1/auth/${provider}/redirect?type=customer`;
+
+    window.open(url, "SocialLogin", `width=${width},height=${height},top=${top},left=${left}`);
+
+    const handleMessage = (event) => {
+        if (event.origin !== "http://127.0.0.1:8000") return;
+
+        const { token, user, error } = event.data;
+
+        if (token) {
+            authStore.token = token;
+            authStore.user = user;
+
+            window.removeEventListener("message", handleMessage);
+            router.push({ name: 'Home' });
+        } else if (error) {
+            errorMessage.value = error;
+            window.removeEventListener("message", handleMessage);
+        }
+    };
+
+    window.addEventListener("message", handleMessage);
 };
 </script>
 
 <style scoped>
-/* Khối hiển thị email + nút Thay đổi */
 .email-display-box {
     display: flex;
     align-items: center;
@@ -170,5 +211,25 @@ const goToRegister = () => {
 .new-user-text {
     font-size: 13px;
     margin-bottom: 18px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #fff;
+    border: 1px solid #d5d9d9;
+    box-shadow: 0 1px 2px rgba(15,17,17,.15);
+}
+.social-btn:hover {
+    background-color: #f7fafa;
+}
+.social-icon {
+    width: 18px;
+    height: 18px;
+}
+.w-100 {
+    width: 100%;
 }
 </style>

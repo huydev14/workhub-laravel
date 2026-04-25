@@ -26,6 +26,11 @@ class Customer extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
+    public function socialAccounts()
+    {
+        return $this->hasMany(SocialAccount::class);
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
