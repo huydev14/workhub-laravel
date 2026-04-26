@@ -168,7 +168,8 @@ const loginWithSocial = (provider) => {
     const left = window.innerWidth / 2 - width / 2;
     const top = window.innerHeight / 2 - height / 2;
 
-    const url = `http://127.0.0.1:8000/api/v1/auth/${provider}/redirect?type=customer`;
+    const baseUrl = import.meta.env.VITE_APP_URL;
+    const url = `${baseUrl}/api/v1/auth/${provider}/redirect?type=customer`;
 
     window.open(url, "SocialLogin", `width=${width},height=${height},top=${top},left=${left}`);
 
