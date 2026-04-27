@@ -1,9 +1,5 @@
 <template>
-    <AuthLayout
-        :title="currentTitle"
-        :errorMessage="errorMessage"
-        :actionText="actionText"
-    >
+    <AuthLayout :title="currentTitle" :errorMessage="errorMessage" :actionText="actionText">
         <form v-if="step === 'email'" @submit.prevent="handleCheckEmail" class="login-form" novalidate>
             <div class="a-input-text-group">
                 <label for="email" class="a-form-label">Nhập số điện thoại di động hoặc email</label>
@@ -14,16 +10,11 @@
                 {{ isLoading ? 'Đang kiểm tra...' : 'Tiếp tục' }}
             </button>
 
-            <div class="a-divider a-divider-break tw-mt-5 tw-mb-5">
+            <div class="a-divider a-divider-break tw-mb-5 tw-mt-5">
                 <h5>Hoặc</h5>
             </div>
 
-            <button
-                type="button"
-                @click="loginWithSocial('google')"
-                class="a-button-secondary w-100 social-btn"
-                :disabled="isLoading"
-            >
+            <button type="button" @click="loginWithSocial('google')" class="a-button-secondary w-100 social-btn" :disabled="isLoading">
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo" class="social-icon" />
                 Tiếp tục với Google
             </button>
@@ -56,26 +47,26 @@
 
             <p class="new-user-text">Hãy tạo tài khoản bằng email của bạn</p>
 
-            <button @click="goToRegister" class="a-button-primary">
-                Tiếp tục tạo tài khoản
-            </button>
+            <button @click="goToRegister" class="a-button-primary">Tiếp tục tạo tài khoản</button>
         </div>
 
         <template #footer-action>
             <div v-if="step === 'email'">
                 <div class="a-divider a-divider-break">
-                    <h5>Mới biết đến Amahuy?</h5>
+                    <h5>Mới biết đến {{ APP_CONFIG.appName }}?</h5>
                 </div>
-                <router-link :to="{ name: 'Register'}" custom v-slot="{ navigate }">
-                    <button @click="navigate" class="a-button-secondary w-100">Tạo tài khoản Amahuy của bạn</button>
+                <router-link :to="{ name: 'Register' }" custom v-slot="{ navigate }">
+                    <button @click="navigate" class="a-button-secondary w-100">Tạo tài khoản {{ APP_CONFIG.appName }} của bạn</button>
                 </router-link>
             </div>
 
             <div v-if="step === 'new_user'">
                 <div class="a-divider a-divider-break"></div>
-                <div class="already-have-account" style="margin-top: 14px;">
-                    <span style="font-weight: bold; display: block; margin-bottom: 4px;">Đã là khách hàng?</span>
-                    <a href="#" @click.prevent="step = 'email'" class="a-link-normal">Đăng nhập bằng email hoặc số điện thoại di động khác</a>
+                <div class="already-have-account" style="margin-top: 14px">
+                    <span style="font-weight: bold; display: block; margin-bottom: 4px">Đã là khách hàng?</span>
+                    <a href="#" @click.prevent="step = 'email'" class="a-link-normal"
+                        >Đăng nhập bằng email hoặc số điện thoại di động khác</a
+                    >
                 </div>
             </div>
         </template>
@@ -87,7 +78,8 @@ import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import api from '../services/api';
-import AuthLayout from '@client/layouts/AuthLayout.vue';
+import AuthLayout from '@/layouts/AuthLayout.vue';
+import { APP_CONFIG } from '@/config';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -105,7 +97,7 @@ const errorMessage = ref('');
 const currentTitle = computed(() => {
     if (step.value === 'email') return 'Đăng nhập hoặc tạo tài khoản';
     if (step.value === 'password') return 'Đăng nhập';
-    return 'Có vẻ như bạn mới biết đến Amahuy';
+    return `Có vẻ như bạn mới biết đến ${APP_CONFIG.appName}?`;
 });
 
 const actionText = computed(() => {
@@ -164,14 +156,14 @@ const goToRegister = () => {
 const loginWithSocial = (provider) => {
     errorMessage.value = '';
 
-    const width = 500, height = 600;
+    const width = 500,
+        height = 600;
     const left = window.innerWidth / 2 - width / 2;
     const top = window.innerHeight / 2 - height / 2;
 
-    const baseUrl = import.meta.env.VITE_APP_URL;
-    const url = `${baseUrl}/api/v1/auth/${provider}/redirect?type=customer`;
+    const url = `${APP_CONFIG.apiUrl}/auth/${provider}/redirect?type=customer`;
 
-    window.open(url, "SocialLogin", `width=${width},height=${height},top=${top},left=${left}`);
+    window.open(url, 'SocialLogin', `width=${width},height=${height},top=${top},left=${left}`);
 
     const handleMessage = (event) => {
         const { token, user, error } = event.data;
@@ -180,15 +172,15 @@ const loginWithSocial = (provider) => {
             authStore.token = token;
             authStore.user = user;
 
-            window.removeEventListener("message", handleMessage);
+            window.removeEventListener('message', handleMessage);
             router.push({ name: 'Home' });
         } else if (error) {
             errorMessage.value = error;
-            window.removeEventListener("message", handleMessage);
+            window.removeEventListener('message', handleMessage);
         }
     };
 
-    window.addEventListener("message", handleMessage);
+    window.addEventListener('message', handleMessage);
 };
 </script>
 
@@ -219,7 +211,7 @@ const loginWithSocial = (provider) => {
     gap: 8px;
     background-color: #fff;
     border: 1px solid #d5d9d9;
-    box-shadow: 0 1px 2px rgba(15,17,17,.15);
+    box-shadow: 0 1px 2px rgba(15, 17, 17, 0.15);
 }
 .social-btn:hover {
     background-color: #f7fafa;

@@ -31,7 +31,7 @@ class CustomerOTPMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->otp . ' là mã xác minh Amazon của bạn',
+            subject: $this->otp . ' là mã xác minh ' . env('APP_NAME') . ' của bạn',
         );
     }
 

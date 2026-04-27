@@ -1,42 +1,24 @@
 <template>
-    <footer class="login-footer">
-        <div class="footer-links">
-            <a href="#">Điều khoản sử dụng</a>
-            <a href="#">Thông báo Bảo mật</a>
-            <a href="#">Trợ giúp</a>
+    <footer class="tw-mt-7 tw-w-full tw-border-t tw-border-gray-300 tw-bg-[#fbfbfb] tw-py-7 tw-flex tw-flex-col tw-items-center">
+
+        <div class="tw-mb-2.5 tw-flex tw-flex-wrap tw-justify-center tw-gap-5">
+            <a href="#" class="tw-text-[11px] tw-text-[#0066c0] tw-no-underline hover:tw-underline">
+                Điều khoản sử dụng
+            </a>
+            <a href="#" class="tw-text-[11px] tw-text-[#0066c0] tw-no-underline hover:tw-underline">
+                Thông báo Bảo mật
+            </a>
+            <a href="#" class="tw-text-[11px] tw-text-[#0066c0] tw-no-underline hover:tw-underline">
+                Trợ giúp
+            </a>
         </div>
-        <p class="footer-copyright">© 2024-2026, Amazon.com, Inc. hoặc các chi nhánh của nó</p>
+
+        <p class="tw-text-[11px] tw-text-[#555] tw-m-0">
+            © 2024-2026, {{ APP_CONFIG.appName }}.com, Inc. hoặc các chi nhánh của nó
+        </p>
     </footer>
 </template>
 
-<style scoped>
-/* Copy phần CSS của footer từ file cũ mang sang đây */
-.login-footer {
-    width: 100%;
-    margin-top: 26px;
-    padding-top: 26px;
-    border-top: 1px solid #ddd;
-    background-color: #fbfbfb;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 30px; /* Thêm chút padding dưới cho thoáng */
-}
-.footer-links {
-    margin-bottom: 10px;
-}
-.footer-links a {
-    color: #0066c0;
-    text-decoration: none;
-    font-size: 11px;
-    margin: 0 10px;
-}
-.footer-links a:hover {
-    text-decoration: underline;
-}
-.footer-copyright {
-    font-size: 11px;
-    color: #555;
-    margin: 0;
-}
-</style>
+<script setup>
+import { APP_CONFIG } from '@/config';
+</script>

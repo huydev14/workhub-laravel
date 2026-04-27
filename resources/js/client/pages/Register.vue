@@ -45,7 +45,7 @@ import { ref, reactive, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import api from '../services/api';
-import AuthLayout from '@client/layouts/AuthLayout.vue';
+import AuthLayout from '@/layouts/AuthLayout.vue';
 const router = useRouter();
 const route = useRoute();
 

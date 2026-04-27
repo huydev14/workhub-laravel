@@ -5,29 +5,29 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: () => import('@client/pages/Home.vue'),
+        component: () => import('@/pages/Home.vue'),
     },
     {
         path: '/login',
         name: 'Login',
-        component: () => import('@client/pages/Login.vue'),
+        component: () => import('@/pages/Login.vue'),
         meta: { guestOnly: true },
     },
     {
         path: '/register',
         name: 'Register',
-        component: () => import('@client/pages/Register.vue'),
+        component: () => import('@/pages/Register.vue'),
         meta: { guestOnly: true },
     },
     {
         path: '/verify-otp',
         name: 'VerifyOTP',
-        component: () => import('@client/pages/VerifyOTP.vue'),
+        component: () => import('@/pages/VerifyOTP.vue'),
     },
     // {
     //     path: '/profile',
     //     name: 'Profile',
-    //     component: () => import('@client/pages/Profile.vue'),
+    //     component: () => import('@/pages/Profile.vue'),
     //     meta: { requiresAuth: true },
     // },
 ];

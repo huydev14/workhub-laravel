@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="logo">Amahuy</div>
+        <div class="logo">{{ env('APP_NAME') }}</div>
         <p>Xin chào {{ $customerName }},</p>
         <p>Để hoàn tất việc tạo tài khoản, vui lòng sử dụng mã xác minh (OTP) sau đây:</p>
 
@@ -19,7 +19,7 @@
         <p>Mã này có hiệu lực trong 10 phút. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
 
         <div class="footer">
-            © 2026 Amazon.com.
+            © 2026 {{ env('APP_NAME') }}.com.
         </div>
     </div>
 </body>

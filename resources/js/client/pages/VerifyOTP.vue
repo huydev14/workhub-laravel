@@ -25,7 +25,7 @@
             </div>
 
             <button type="submit" class="a-button-primary" :disabled="isLoading || otpCode.length < 6">
-                {{ isLoading ? 'Đang xác minh...' : 'Tạo tài khoản Amazon của bạn' }}
+                {{ isLoading ? 'Đang xác minh...' : 'Tạo tài khoản ' + APP_CONFIG.appName + ' của bạn' }}
             </button>
         </form>
 
@@ -50,7 +50,7 @@ import '@scss/client/auth.scss';
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import api from '../services/api';
-import AuthLayout from '@client/layouts/AuthLayout.vue';
+import AuthLayout from '@/layouts/AuthLayout.vue';
 
 const router = useRouter();
 const route = useRoute();
