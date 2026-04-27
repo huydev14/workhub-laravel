@@ -27,24 +27,27 @@
                 @php
                     $providers = [
                         ['id' => 'google', 'title' => 'Google Cloud', 'subtitle' => 'Identity Platform', 'icon' => 'fab fa-google'],
+                        ['id' => 'microsoft', 'title' => 'Microsoft Teams', 'subtitle' => 'Microsoft Entra ID', 'icon' => 'fab fa-microsoft'],
                         ['id' => 'facebook', 'title' => 'Facebook Login', 'subtitle' => 'Meta for Developers', 'icon' => 'fab fa-facebook-f'],
-                        ['id' => 'github', 'title' => 'GitHub OAuth', 'subtitle' => 'Source control auth', 'icon' => 'fab fa-github']
+                        ['id' => 'github', 'title' => 'GitHub OAuth', 'subtitle' => 'Source control auth', 'icon' => 'fab fa-github'],
                     ];
                 @endphp
 
                 @foreach($providers as $p)
-                    <button class="nav-link {{ $loop->first ? 'active' : '' }} fluent-tab-item tw-mb-1 tw-text-left tw-flex tw-items-center tw-gap-3 tw-border-none tw-w-full tw-bg-transparent"
+                    <a class="nav-link {{ $loop->first ? 'active' : '' }} fluent-tab-item tw-mb-1 tw-text-left tw-flex tw-items-center tw-gap-3 tw-border-none tw-w-full tw-bg-transparent"
                         id="v-pills-{{ $p['id'] }}-tab"
-                        data-bs-toggle="pill"
-                        data-bs-target="#v-pills-{{ $p['id'] }}"
-                        type="button" role="tab">
+                        data-toggle="pill"
+                        href="#v-pills-{{ $p['id'] }}"
+                        role="tab"
+                        aria-controls="v-pills-{{ $p['id'] }}"
+                        aria-selected="{{ $loop->first ? 'true' : 'false' }}">
 
                         <i class="{{ $p['icon'] }} tw-text-lg"></i>
                         <div class="tw-flex tw-flex-col">
                             <span class="tw-font-medium tw-text-sm">{{ $p['title'] }}</span>
                             <span class="tw-text-[11px] tw-opacity-70">{{ $p['subtitle'] }}</span>
                         </div>
-                    </button>
+                    </a>
                 @endforeach
             </div>
         </div>
@@ -52,47 +55,49 @@
         {{-- Content Right --}}
         <div class="lg:tw-col-span-9">
             <div class="tab-content" id="v-pills-tabContent">
-                @foreach(['google', 'facebook', 'github'] as $provider)
+                @foreach($providers as $provider)
                     <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
-                         id="v-pills-{{ $provider }}"
-                         role="tabpanel">
+                         id="v-pills-{{ $provider['id'] }}"
+                         role="tabpanel"
+                         aria-labelledby="v-pills-{{ $provider['id'] }}-tab">
 
                         <div class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-border tw-border-[#edebe9]">
                             <div class="tw-p-6 tw-border-b tw-border-[#edebe9] tw-flex tw-justify-between tw-items-center">
-                                <h5 class="tw-text-lg tw-font-semibold tw-text-[#323130] tw-mb-0">{{ ucfirst($provider) }} Configuration</h5>
-                                <span class="tw-px-2 tw-py-1 tw-text-[11px] tw-font-medium tw-bg-[#f3f2f1] tw-text-[#605e5d] tw-rounded tw-border">ID: {{ $provider }}</span>
+                                <h5 class="tw-text-lg tw-font-semibold tw-text-[#323130] tw-mb-0">{{ $provider['title'] }} Configuration</h5>
+                                <span class="tw-px-2 tw-py-1 tw-text-[11px] tw-font-medium tw-bg-[#f3f2f1] tw-text-[#605e5d] tw-rounded tw-border">ID: {{ $provider['id'] }}</span>
                             </div>
 
                             <div class="tw-p-8">
                                 @php
-                                    $currentConfig = $configs[$provider] ?? null;
+                                    $providerId = $provider['id'];
+                                    $currentConfig = $configs[$providerId] ?? null;
                                 @endphp
 
-                                <form method="POST" action="{{ route('oauth-configs.update', $provider) }}" class="tw-space-y-6">
+                                <form method="POST" action="{{ route('oauth-configs.update', $providerId) }}" class="tw-space-y-6">
                                     @csrf
                                     @method('PATCH')
 
                                     <div class="tw-flex tw-items-center tw-justify-between tw-p-4 tw-bg-[#faf9f8] tw-rounded-md tw-border">
                                         <div>
                                             <div class="tw-font-medium tw-text-sm tw-text-[#323130]">Trạng thái hoạt động</div>
-                                            <div class="tw-text-xs tw-text-[#605e5d]">Cho phép hoặc chặn đăng nhập qua {{ ucfirst($provider) }}</div>
+                                            <div class="tw-text-xs tw-text-[#605e5d]">Cho phép hoặc chặn đăng nhập qua {{ $provider['title'] }}</div>
                                         </div>
                                         <x-switch name="is_active" value="1" :checked="old('is_active', $currentConfig->is_active ?? false)" />
                                     </div>
 
                                     <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
                                         <div>
-                                            <x-input id="{{ $provider }}_client_id" label="Client ID" name="client_id" icon="fas fa-key"
+                                            <x-input id="{{ $providerId }}_client_id" label="Client ID" name="client_id" icon="fas fa-key"
                                                 :value="old('client_id', $currentConfig->client_id ?? '')" placeholder="..." required="true" />
                                         </div>
                                         <div>
-                                            <x-input id="{{ $provider }}_client_secret" label="Client Secret" name="client_secret" type="password" icon="fas fa-lock"
+                                            <x-input id="{{ $providerId }}_client_secret" label="Client Secret" name="client_secret" type="password" icon="fas fa-lock"
                                                 :value="old('client_secret', $currentConfig->client_secret ?? '')" placeholder="••••••••••••" required="true" />
                                         </div>
                                         <div class="tw-col-span-1 md:tw-col-span-2">
-                                            <x-input id="{{ $provider }}_redirect_uri" label="Authorized Redirect URI" name="redirect_uri" type="url" icon="fas fa-link"
+                                            <x-input id="{{ $providerId }}_redirect_uri" label="Authorized Redirect URI" name="redirect_uri" type="url" icon="fas fa-link"
                                                 :value="old('redirect_uri', $currentConfig->redirect_uri ?? '')" placeholder="https://..." required="true"
-                                                helper="Copy URL này dán vào {{ ucfirst($provider) }} Console." />
+                                                helper="Copy URL này dán vào {{ $provider['title'] }} Console." />
                                         </div>
                                     </div>
 
@@ -111,8 +116,12 @@
 </div>
 
 <style>
-    /* Custom Fluent Pills */
-    .fluent-tab-item { border: none !important; border-radius: 4px !important; color: #323130 !important; transition: background 0.15s ease; }
+    .fluent-tab-item {
+        border: none !important;
+        border-radius: 4px !important;
+        color: #323130 !important;
+        transition: background 0.15s ease;
+    }
     .fluent-tab-item:hover { background-color: #f3f2f1 !important; }
     .fluent-tab-item.active { background-color: #edebe9 !important; color: #0078d4 !important; position: relative; font-weight: 600; }
     .fluent-tab-item.active::before { content: ""; position: absolute; left: 0; top: 20%; height: 60%; width: 3px; background-color: #0078d4; border-radius: 2px; }
